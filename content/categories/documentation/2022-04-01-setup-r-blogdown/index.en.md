@@ -62,6 +62,14 @@ The web server can be stopped by `blogdown::stop_server()`, and it will always b
 
 Just save images in in the same folder as the post document, for example, `posts/2022-08-16-无他-但手熟尔/xxx.png`
 
+# post a new Rmarkdown-generated file
+
+Choose `.Rmarkdown` format in `New Post` and start writing.
+
+When done, use `knit` to check the Rmarkdown file contain no bug (you may need to change to the working folder if there requires reading in data files), then delete the `.html` file. 
+
+Restart R, in the blog folder, use `serve site` in the `Addins` to generate the website page.
+
 
 Useful tutorial:
 

@@ -1,0 +1,250 @@
+---
+title: 'Linear modeling: Visulaze & Interpret the Interaction'
+author: Ming
+date: '2022-04-05'
+slug: []
+categories:
+  - statistics
+  - R
+tags:
+  - statistics
+  - linear regression
+subtitle: ''
+lastmod: '2023-05-26T14:07:59-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,message = F,warning = F,
+        fig.width=5,fig.height=3,fig.align='center')
+library(knitr)
+```
+
+## basic model
+$y = b0 + b1*x1 + b2*x2 + b3*(x1+x2)$
+
+## Scenario 1: one numeric + one factor
+
+### load the data
+```{r}
+library(tidyverse)
+data(mtcars)
+glimpse(mtcars)
+# to start with, visualize each predictor effect separately
+par(mfrow=c(1,2),mar=c(3,3,1,1))
+plot(mtcars$disp,mtcars$mpg)
+boxplot(mpg~vs,data=mtcars)
+# try to have a holistic view
+ggplot(data=mtcars,aes(x=disp,y=mpg))+geom_point()+facet_wrap(.~vs)+theme_bw(base_size = 15)
+# make it even simple and clear
+ggplot(data=mtcars,aes(x=disp,y=mpg,col=factor(vs)))+geom_point()+theme_bw(base_size = 15)
+```
+
+Asking 'is there interaction between `disp` and `vs`', is like asking: if I fit lines for green dots and red dots separately, 
+
+- would the two lines be the same? 
+- have different intercept? 
+- have different slopes?
+
+### build two linear models
+```{r}
+m0<-lm(mpg~disp+vs,data=mtcars)
+m1<-lm(mpg~disp*vs,data=mtcars)
+anova(m0,m1)
+```
+The `anova` shows linear model with the interaction term, `m1` in the above code, fits the data slightly better with a pvalue 0.01335.
+
+Then how to interpret the `m0` and `m1` models?    
+
+As the basic linear model is: $y = b0 + b1*x1 + b2*x2 + b3*(x1+x2)$    
+in our case, x1=disp, x2=vs
+
+
+### interprete the model without interaction
+for model `m0`: $y = b0 + b1*disp + b2*vs$    
+
+- **vs=0**, $y = b0 + b1*disp$
+- **vs=1**, $y = b0 + b1*disp + b2$
+<br>   or, $y = b0 +b2 + b1*disp$
+
+Thus, without the interaction term, the effect of `vs` only show up for the intercept, which means there are two parallele lines for blue and red dots.
+
+```{r}
+(x=coef(m0))
+ggplot(data=mtcars,aes(x=disp,y=mpg,col=factor(vs)))+geom_point()+theme_bw(base_size = 15)+
+  geom_abline(intercept = x[1], slope = x[2], color="#F8766D", 
+                 linetype="dashed", size=1)+ 
+  geom_abline(intercept = x[1]+x[3], slope = x[2], color="#00BFC4", 
+                 linetype="dashed", size=1)
+```  
+
+To interpret `m0`,     
+
+- holding `vs` constant, if increase `disp` by 100, the `mpg` would increase b1\*100 = `r x[2]*100`.
+- holding `disp` constant, cars with `vs=1` is b2 = `r x[3]` larger than `vs=0` ones.
+
+### interprete the model with interaction
+
+for model `m1`: $y = b0 + b1*disp + b2*vs + b3*disp*vs$   
+
+- **vs=0**, $y = b0 + b1*disp$
+- **vs=1**, $y = b0 + b1*disp + b2 + b3*disp$
+ <br>   or, $y = b0 +b2 + (b1+b3)*disp$
+
+Thus, with the interaction term, the effect of `vs` show up both for the intercept and the slope, which means the lines would intercross.
+
+```{r}
+(x=coef(m1)) #b0,b1,b2,b3
+ggplot(data=mtcars,aes(x=disp,y=mpg,col=factor(vs)))+geom_point()+theme_bw(base_size = 15)+
+  geom_abline(intercept = x[1], slope = x[2], color="#F8766D", 
+                 linetype="dashed", size=1)+ 
+  geom_abline(intercept = x[1]+x[3], slope = x[2]+x[4], color="#00BFC4", 
+                 linetype="dashed", size=1)
+```  
+
+To interpret `m1`,     
+
+- holding `vs` constant, if increase `disp` by 100, 
+  + if `vs=0`, the `mpg` would increase b1\*100 = `r x[2]*100`.
+  + if `vs=1`, the `mpg` would increase (b1+b3)\*100 = `r (x[2]+x[4])*100`.
+
+- holding `disp` constant, cars with `vs=1` is b2+b3\*disp = `r x[3]` + `r x[4]`\*disp larger than `vs=0` ones.
+
+## Scenario 2: one factor + one factor
+
+Basic linear model: $y = b0 + b1*x1 + b2*x2 + b3*(x1+x2)$    
+in this case, x1=am, x2=vs
+
+```{r}
+# to start with, visualize each predictor effect separately
+par(mfrow=c(1,2),mar=c(3,3,1,1))
+boxplot(mpg~am,data=mtcars)
+boxplot(mpg~vs,data=mtcars)
+# try to have a holistic view
+ggplot(data=mtcars,aes(x=factor(am),y=mpg))+geom_boxplot()+facet_wrap(.~vs)+theme_bw(base_size = 15)
+# make it even simple and clear
+ggplot(data=mtcars,aes(x=factor(am),y=mpg,col=factor(vs)))+geom_boxplot()+theme_bw(base_size = 15)
+ggplot(data=mtcars,aes(x=factor(am),y=mpg,col=factor(vs)))+
+  geom_line(aes(group=factor(vs)),position = position_dodge(width = 0.5))+geom_point(position = position_dodge(width = 0.5))+theme_bw(base_size = 15)
+
+m0=lm(mpg~vs+am,data=mtcars)
+m1=lm(mpg~vs*am,data=mtcars)
+anova(m0,m1)
+```
+
+**without interaction** $y = b0 + b1*am + b2*vs$    
+
+- **vs=0**, $y = b0 + b1*am$
+- **vs=1**, $y = b0 + b2 + b1*am$
+
+Similarly, 
+
+- **am=0**, $y = b0 + b2*vs$
+- **am=1**, $y = b0 + b1 + b2*vs$
+
+The effect of `am` or `vs` does not depend on the other term.
+
+- Holding `vs` constant, increase of 100 `am` lead to b1*100 increase in `mpg`.
+- Holding `am` constant, increase of 100 `vs` lead to b2*100 increase in `mpg`.
+
+
+
+**with interaction** $y = b0 + b1*am + b2*vs + b3*am*vs$    
+
+- **vs=0**, $y = b0 + b1*am$
+- **vs=1**, $y = b0 + b2 + (b1+b3)*am$
+
+Similarly, 
+
+- **am=0**, $y = b0 + b2*vs$
+- **am=1**, $y = b0 + b1 + (b2+b3)*vs$
+
+Factors of `am` or `vs` affect each other.
+
+- Holding `vs` constant, increase of 100 `am` lead to (b1+b3)*100 increase in `mpg`.
+- Holding `am` constant, increase of 100 `vs` lead to (b2+b3)*100 increase in `mpg`.
+
+## Scenario 3: one numeric + one numeric
+```{r}
+# to start with, visualize each predictor effect separately
+par(mfrow=c(1,2),mar=c(3,3,1,1))
+plot(mpg~disp,data=mtcars)
+plot(mpg~drat,data=mtcars)
+# try to have a holistic view, as it's two numeric predictor,
+# there is no easy to visualize them
+ggplot(data=mtcars,aes(x=disp,y=mpg,col=drat))+geom_point()+theme_bw(base_size = 15)
+
+m0=lm(mpg~disp+drat,data=mtcars)
+m1=lm(mpg~disp*drat,data=mtcars)
+anova(m0,m1)
+```
+
+### interprete the model without interaction
+
+**without interaction** $y = b0 + b1*disp + b2*drat$    
+
+The effect of `disp` or `drat` does not depend on the other term.
+
+- Holding `drat` constant, increase of 100 `disp` lead to b1*100 increase in `mpg`.
+- Holding `disp` constant, increase of 100 `drat` lead to b2*100 increase in `mpg`.
+
+```{r}
+(x=coef(m0))
+g1<-ggplot(data=mtcars,aes(x=disp,y=mpg))+geom_point()+theme_bw(base_size = 15)+xlim(c(0,500))+
+  geom_abline(intercept = x[1], slope = x[2], color="#F8766D", 
+                 linetype="dashed", size=1)
+g2<-ggplot(data=mtcars,aes(x=drat,y=mpg))+geom_point()+theme_bw(base_size = 15)+xlim(c(0,5))+
+  geom_abline(intercept = x[1], slope = x[3], color="#00BFC4", 
+                 linetype="dashed", size=1)
+gridExtra::grid.arrange(g1,g2,ncol=2)
+```  
+
+
+### interprete the model with interaction
+
+**without interaction** $y = b0 + b1*disp + b2*drat + b3*disp*drat$    
+
+The effect of `disp` or `drat` depends on the other term.
+
+- Holding `drat` constant, increase of 100 `disp` lead to (b1+b3\*drat)*100 increase in `mpg`.
+- Holding `disp` constant, increase of 100 `drat` lead to (b2+b3\*disp)*100 increase in `mpg`.
+
+<br>
+**Some useful ref**
+https://ademos.people.uic.edu/Chapter13.html#2_continuous_x_continuous_regression
+
+
+

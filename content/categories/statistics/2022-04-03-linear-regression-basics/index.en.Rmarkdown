@@ -1,5 +1,5 @@
 ---
-title: Linear Regression - Basics
+title: Linear Regression - basics
 author: Ming
 date: '2022-04-03'
 slug: []
@@ -10,7 +10,7 @@ tags:
   - linear regression
   - statistics
 subtitle: ''
-lastmod: '2023-05-26T12:51:51-07:00'
+lastmod: '2023-05-26T14:15:51-07:00'
 authorLink: ''
 description: ''
 license: ''
@@ -45,6 +45,7 @@ library:
 seo:
   images: []
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T,message = F,warning = F,
@@ -498,4 +499,5 @@ plot(allEffects(fit13))
 Note that in example above we use the anova function with the option test="LRT", which allows us to perform a Likelihood Ratio Test (LRT). This is appropriate for GLMs because the usual F-tests may not be inaccurate when the distribution is not normal.
 
 
-<!--more-->
+
+

@@ -1,0 +1,405 @@
+---
+title: Linear Mixed Model -Practice
+author: Ming
+date: '2022-05-01'
+slug: []
+categories:
+  - statistics
+  - R
+tags:
+  - linear mixed model
+  - statistics
+subtitle: ''
+lastmod: '2023-05-26T14:29:03-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,message = F,warning = F,
+        fig.width=8,fig.height=5,fig.align='center')
+library(knitr)
+library(tidyverse)
+```
+
+All datasets are downloaded here: http://www.hiercourse.com/mixedeffects.html
+
+The code is extracted from this tutorial: http://www.hiercourse.com/docs/Rnotes_mixed.pdf
+
+# dataset1: individual-level variation in tree canopy gradients
+
+## data inspection 
+```{r}
+pref<-read.csv("prefdata.csv")
+head(pref)
+pref$species=factor(pref$species)
+levels(pref$species)
+# two tree species
+# interested in using species and dfromtop to predict LMA
+ggplot(pref,aes(x=dfromtop,y=LMA,col=species))+
+  geom_point()+theme_bw()
+
+# but here, not each point is a independent tree
+# as each tree have more than one mearsurements
+ggplot(pref,aes(x=dfromtop,y=LMA,col=species))+
+  geom_point()+theme_bw()+facet_wrap(.~ID)
+ggplot(pref,aes(x=dfromtop,y=LMA,col=species))+
+  geom_point()+theme_bw()+geom_line(aes(group=ID))
+
+### dataset description: two species, each has some tree individuals
+# and there are repeated measures for each individual
+# can we use one 'common model framework' to describe all of them
+```
+
+## to start with, fit a linear regression by species (ignoring individual-level variation) 
+```{r}
+lm1 <- lm(LMA ~ species + dfromtop + species:dfromtop, data=pref)
+# Plot predictions
+library(visreg)
+visreg(lm1, "dfromtop", by="species", overlay=TRUE)
+```
+
+## tricky thing about 'anova', use 'Anova' instead!
+```{r}
+anova(lm1)
+lm1.1 <- lm(LMA ~  dfromtop+species+species:dfromtop, data=pref)
+anova(lm1.1)
+```
+>Note that the order of the variables entered in the model matters because each next term is tested against a model that includes all terms preceding it (so-called Type-I tests). These standard tests with anova are sequential tests, which is perhaps not the most intuitive behaviour.
+#In many cases it is more intuitive to use so-called Type-II tests, in which each main effect is tested against a model that includes all other terms. We can use Anova (from the car package) to do this.
+
+**to circumvent this, use 'Anova' from 'car' package**
+```{r}
+library(car)
+Anova(lm1)
+Anova(lm1.1)
+```
+
+## do lm many times: fit each LMA~dfromtop for each tree separately 
+```{r}
+# fit linear regression by tree ('ID')
+library(lme4)
+lmlis1 <- lmList(LMA ~ dfromtop | ID, data=pref)
+# Extract coefficients (intercepts and slopes) for each tree
+liscoef <- coef(lmlis1)
+# load plottix for the 'ablineclip' function, which clips lines within the range of x
+library(plotrix)
+# split pref by tree (prefsp is a list)
+prefsp <- split(pref, pref$ID)
+names(prefsp)
+rownames(liscoef)
+sum(rownames(liscoef)==names(prefsp))
+
+# Plot
+palette(c("red","blue"))
+with(pref, plot(dfromtop, LMA, col=species, pch=16, cex=0.8))
+
+for(i in 1:length(prefsp)){
+  # Find min and max values of dfromtop, to send to ablineclip
+  xmin <- min(prefsp[[i]]$dfromtop)
+  xmax <- max(prefsp[[i]]$dfromtop)
+  # add regression lines
+  ablineclip(liscoef[i,1], liscoef[i,2], x1=xmin, x2=xmax,
+             col=prefsp[[i]]$species)
+}
+```
+
+Messages from the above plots:
+
+1. Intercepts vary a lot between trees
+2. There seems to be a negative relationship for many trees
+3. It seems there is less variation between slopes than intercepts
+
+## fit mixed models and compare them
+
+fit two models: one with a random intercept only, and one with a random intercept and slope.
+
+*When we fit a mixed-effects model, not only do we get an estimate of the variance (or standard de- viation) of the random effects, we also get estimates of this random effect for each individual. These estimates are known as the BLUPs (best linear unbiased predictors).*
+
+```{r}
+# explore random structure in data
+library(lme4)
+# Random intercept only
+pref_m1 <- lmer(LMA ~ species + dfromtop + species:dfromtop + (1|ID), data=pref)
+# Random intercept and slope
+pref_m2 <- lmer(LMA ~ species + dfromtop + species:dfromtop + (dfromtop|ID), data=pref)
+# there is warning message, but the model still gets built
+
+VarCorr(pref_m1)
+VarCorr(pref_m2)
+fixef(pref_m1)
+head(ranef(pref_m1)[[1]])
+fixef(pref_m2)
+head(ranef(pref_m2)[[1]])
+
+### compare mixed model (anova.merMod)
+AIC(pref_m1,pref_m2) #AIC
+anova(pref_m1, pref_m2) #Likelihood ratio test
+```
+
+**Since we use anova on an object returned by lmer, this command invokes the anova.merMod function, from the lme4 package**
+
+There will be more information by `?anova.merMod`
+
+From the test results, we don't need a random_slope.
+After deciding the random structure, go on testing fixed effects
+
+## use Anova to get p-value for fixed effects
+
+after deciding random structure, go on test fixed effects
+```{r}
+Anova(pref_m1)
+# compare lm1 and pref_m1
+Anova(lm1)
+
+# Plot predictions
+par(mfrow=c(1,2))
+visreg(pref_m1, "dfromtop", by="species",overlay=TRUE,main='\nmixed model')
+visreg(lm1, "dfromtop", by="species", overlay=TRUE,main='\nlinear model')
+```
+
+>Ignoring the tree-to-tree variance thus resulted in drawing the wrong conclusion from our data. When we accounted for this variation with a mixed-effects model, we did find a significant overall relationship between LMA and dfromtop. The reason for this discrepancy is that the large variation in intercepts between the individual trees (between-subject variation) masked the relationship between the two variables within individuals (within-subject variation).
+
+##  model diagnostics
+```{r}
+plot(pref_m1)
+invisible(qqPlot(residuals(pref_m1)))
+
+#The positive scaling of the residuals with increasing fitted values suggest that either a log- or square
+# fit model with log-transformed response
+pref_m2.ln <- lmer(log(LMA) ~ species + dfromtop + species:dfromtop +
+                     (dfromtop|ID), data=pref)
+# plot residuals against fitted values
+plot(resid(pref_m2.ln) ~ fitted(pref_m2.ln))
+abline(h=0)
+# quantile-quantile plot
+invisible(qqPlot(residuals(pref_m2.ln)))
+```
+
+
+# dataset2: individual-level variation in metabolic rate of mice
+
+
+All example datasets used were download from [hiercourse by Remko Duursma, Jeff Powell](https://www.hiercourse.com/)
+
+## data inspection
+```{r}
+mouse <- read.csv("wildmousemetabolism.csv")
+head(mouse)
+# Make sure the individual label ('id') is a factor variable
+mouse$id <- as.factor(mouse$id)
+length(unique(mouse$id))
+# looking at all rows for one mouse
+# (not run, inspect yourself)
+# that each mouse (id) was assessed at each of three temperatures (temp) over six consecutive days (day), and that this procedure was repeated three times (run).
+# 3*6*3
+dim(mouse[mouse$id == '99', ])
+# whether temperature has an effect on metabolic rate, and whether individuals were very different in terms of metabolic rate (rmr) at a fixed temperature.
+par(mfrow=c(1,2))
+with(mouse,plot(jitter(temp),rmr, pch=21, bg="#BEBEBE99", ylim=c(0,0.6)))
+
+# Take a subset, and reorder the 'id' factor levels by rmr.
+mouse15 <- subset(mouse, temp == 15)
+mouse15$id <- with(mouse15, reorder(id, rmr, median, na.rm=TRUE))
+# A simple boxplot showing variation in rmr across and within individuals
+boxplot(rmr ~  id, data=mouse15, xlab="id", ylab="rmr",ylim=c(0,0.6))
+```
+
+## build mixed model, 'run' is nested within 'id'
+```{r}
+mouse_m0 <- lmer(rmr ~ temp + (1|id/run), data=mouse )
+VarCorr(mouse_m0)
+#This demonstrates that the variation between individuals (id) is in fact similar to variation between runs within individuals (run:id). 
+Anova(mouse_m0)
+mouse$temp31 <- mouse$temp - 31
+mouse_m1 <- lmer(rmr ~ temp31 + (1|id/run), data=mouse )
+AIC(mouse_m0,mouse_m1)
+```
+
+## add one predictor as fixed effect and compare models with 'KRmodcomp'
+```{r}
+mouse$temp31 <- mouse$temp - 31
+mouse_m2 <- lmer(rmr ~ temp31*bm + (1|id/run), data=mouse )
+library(pbkrtest)
+KRmodcomp(mouse_m2, mouse_m1) #random strucutre the same, choose how many fixed effects to invovle in the model
+```
+
+## use Anova to get pvalue for fixed effects
+```{r}
+#The F-test shows that including body mass and its interaction with temperature significantly improves the overall fit of the model. This does not tell us which of the terms is significant, but the Anova shows that both the main effect and interaction are significant:
+Anova(mouse_m2, test="F")
+
+#An interesting side effect of including body mass as a fixed effect is that the estimated variance of the id is now much smaller. This makes sense because body mass varies between individuals, and thus including it in the model reduces the individual-level variation after having accounted for body mass.
+#Compare the standard deviation for id for the mouse_m2 model (see below) with that estimated for the mouse_m0 model above.
+VarCorr(mouse_m1)
+VarCorr(mouse_m2)
+library(variancePartition)
+calcVarPart(mouse_m1)
+calcVarPart(mouse_m2)
+```
+
+## test whether a more complex random effects structure is supported by the data
+
+We fit two models and compare them with a likelihood ratio test (with anova).
+```{r}
+# Like mouse_m2, but with random slope (temp31)
+mouse_m3 <- lmer(rmr ~ temp31*bm + (temp31|id/run), data=mouse )
+anova(mouse_m3, mouse_m2)
+#The test shows that the more complex model is better, providing evidence that individuals differ sub- stantially in their response to temperature.
+ggplot(mouse,aes(x=temp31,y=rmr))+geom_point()+
+  facet_wrap(.~id)+theme_bw()
+ggplot(mouse,aes(x=bm,y=rmr))+geom_point()+
+  facet_wrap(.~id)+theme_bw()
+
+#As always, when we have a significant main effect and interaction, it is not easy to see how they affect the response variable. As always, it is most convenient to plot the model predictions with the visreg package. T
+# Model predictions as a function of body mass, for the three temperatures.
+# The argument 'partial=FALSE' turns off the partial residuals, producing a cleaner plot.
+par(mfrow=c(1,2))
+visreg(mouse_m3, "bm", by="temp31",overlay=TRUE, partial=FALSE, ylim=c(0,0.4))
+visreg(mouse_m3, "bm", by="temp31",overlay=TRUE, partial=T, ylim=c(0,0.4))
+```
+
+
+## test for the effect of three additional fixed effects on metabolic rate. 
+
+As before, we test these effects one by one. The following code shows tests of sex and wheel on the rmr response variable.
+```{r}
+# No effect of sex
+mouse_m4 <- lmer(rmr ~ bm*temp31 + sex + (temp31|id/run), data=mouse)
+KRmodcomp(mouse_m4, mouse_m3)
+
+# We add 'wheel' only as an additive effect. The interaction cannot be estimated because
+# the only cases where 'wheel=No' were at a temperature of 31C:
+with(mouse, table(temp,wheel))
+
+mouse_m5 <- lmer(rmr ~ bm*temp31 + wheel + (temp31|id/run), data=mouse)
+KRmodcomp(mouse_m5, mouse_m3)
+#We finish with the standard anova table, showing p-values for the main effects.
+Anova(mouse_m5, test="F")
+
+# Make a dataframe with all combinations of temp and id, for run 1 only
+pred_dfr <- expand.grid(temp31=c(-16,-11,0),
+                        id=levels(mouse$id), run=1)
+# Get average body mass by individual, merge onto pred_dfr
+library(doBy)
+bmid <- summaryBy(bm ~ id, FUN=mean, data=mouse, keep.names=TRUE)
+dim(bmid);dim(pred_dfr)
+pred_dfr <- merge(pred_dfr, bmid)
+dim(pred_dfr)
+head(pred_dfr)
+fixef(mouse_m3)
+names(ranef(mouse_m3))
+
+# Predict rmr for every id and temp, from the mouse_m3 model
+# The default behaviour is to make predictions including the random
+# effects (i.e. id and run:id)
+pred_dfr$rmr_pred <- predict(mouse_m3, pred_dfr)
+# Plot the data for run 1
+with(subset(mouse, run==1), plot(jitter(temp),rmr, pch=21, bg="#BEBEBE99", ylim=c(0,0.6)))
+
+# Add a prediction line for every individual. This is an alternative implementation,
+# avoiding a for loop. The use of invisible() avoids lapply from printing output.
+invisible(lapply(split(pred_dfr, pred_dfr$id), function(x)lines(x$temp31 + 31, x$rmr_pred)))
+```
+
+# dataset3: blocked designs in the litter decomposition data
+
+## data inspection
+```{r}
+litter <- read.csv("masslost.csv")
+# Make sure the intended random effects (plot and block) are factors
+litter$plot <- as.factor(litter$plot)
+litter$block <- as.factor(litter$block)
+litter$herbicide <- as.factor(litter$herbicide)
+litter$profile <- as.factor(litter$profile)
+head(litter)
+
+# Represent date as number of days since the start of the experiment
+library(lubridate)
+litter$date <- mdy(litter$date)
+litter$date2 <- litter$date - ymd("2006-05-23")
+
+# Quickly visualize the data to look for treatment effects
+library(lattice)
+bwplot(masslost ~ factor(date) | profile:herbicide, data=litter)
+#We first fit a simple linear model which ignores some details of the experimental design, and use block as a fixed effect. It is often very useful to start with a linear model, perhaps on subsets of the data, to gradually try to make sense of the data.
+# Count the data to confirm that the design is unbalanced (ignore blocks for brevity)
+ftable(xtabs(~ date2 + profile + herbicide, data=litter))
+
+
+# Simple linear model with 'herbicide' as the first predictor in the model,
+m1fix <- lm(masslost ~ date2 + herbicide * profile + block, data = litter)
+Anova(m1fix)
+
+# fit model with random effects, plots nested within blocks
+litter_m1 <- lmer(masslost ~ date2 + herbicide * profile + (1|block/plot),data = litter)
+VarCorr(litter_m1)                  
+
+# refit model without 'plot'
+litter_m2 <- lmer(masslost ~ date2 + herbicide * profile + (1|block),data = litter)
+anova(litter_m1, litter_m2)
+
+# look at significance of main effects and interactions
+Anova(litter_m2, test="F")
+par(mfrow=c(1,2))
+# Because we have three fixed effects, we can make two plots to visualize
+# certain pairs of combinations.
+visreg(litter_m2, "date2", by="profile",
+       ylab='mass lost (proportion)', overlay=TRUE)
+visreg(litter_m2, "profile", by="herbicide", cond=list(date2=100),
+       ylab='mass lost (proportion)', overlay=TRUE)
+```
+
+## three ways to evaluate the importance of a term
+```{r}
+# remove the interaction term from the model
+litter_m2.int <- lmer(masslost ~ date2 + herbicide + profile + (1|block), data = litter)
+# 1. anova
+# Note that anova() will refit the models with ML (not REML) automatically,
+# this is necessary when comparing models with different fixed or random effects terms.
+anova(litter_m2, litter_m2.int)
+
+# 2. KRmodcomp
+library(pbkrtest)
+KRmodcomp(litter_m2, litter_m2.int)
+
+# 3. AIC
+AIC(litter_m2, litter_m2.int)
+```
+
+
+
+

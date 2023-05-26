@@ -1,0 +1,220 @@
+---
+title: Linear Mixed Model - Variance Partition
+author: Ming
+date: '2022-05-02'
+slug: []
+categories:
+  - R
+  - statistics
+tags:
+  - linear mixed model
+  - statistics
+subtitle: ''
+lastmod: '2023-05-26T14:20:20-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F,message = F,warning = F,
+        fig.width=6,fig.height=4,fig.align='center')
+library(knitr)
+library(tidyverse)
+```
+
+When I was doing regression analysis, people suggested that I should try **'linear mixed model'** to better account for the non-independence observations in my dataset or to better control for confounding variables.
+
+I was reading some papers related to linear mixed model, [paper1](https://www.sciencedirect.com/science/article/abs/pii/S0169534709000196) [paper2](https://peerj.com/articles/4794/), I felt very inspired, but when it came to practical research, the real thing I need is a tool that can 'make things happen', or can help me build the linear mixed model, estimate parameter, partition the variance and get the significance value. 
+
+The more I read, the more I feel there is no 'simple' or 'final' answer to these questions, like I didn't know the degree of freedom of a model could be a decimal instead of a integer, and it is a 'huge' thing how to properly estimate the number of freedom in a mixed model, which will affect the following model testing. [paper3](https://www.sciencedirect.com/science/article/abs/pii/S0169534719303465) [paper4](https://www.sciencedirect.com/science/article/abs/pii/S0169534709000196)
+
+After some exploration, I decided I would stop struggling and barely keeping breathing in the water, I'll see if there is any already-built and easy-to-wear life-vest, put it on, float in the water, as long as it doesn't get poked.
+
+So, one thing I frequently get asked when presenting data in lab meeting is how much variance each variable in the linear mixed model could explain, no matter it's a fixed effect or random effect.
+
+After some trying, I find this `variancePartition` R package really helpful, it is built upon ['lme4'](https://cran.r-project.org/web/packages/lme4/vignettes/lmer.pdf) package and nicely wrap up 'lmer' function output (from `lme4` package) into simple, intuitive results.
+
+It has a very nice [documentation](https://www.bioconductor.org/packages/release/bioc/vignettes/variancePartition/inst/doc/variancePartition.pdf) and is easy to get started.
+
+## Hands-on Time~~
+
+```{r echo=T}
+if (!require("variancePartition")){BiocManager::install("variancePartition")}
+
+library(variancePartition)
+library(lme4)
+
+# load the data we are gonna play with
+data(varPartData)
+glimpse(geneExpr) #200gene X 100samples matrix
+glimpse(info) #sample meta information
+
+# fit regression model for the first gene
+fit <- lmer(geneExpr[1,] ~ Age + (1|Individual) + (1|Tissue), data=info, REML=FALSE )
+# use fixef() and ranef() to get estimated.coeff
+fixef(fit)
+ranef(fit)
+
+calcVarPart(fit)
+sum(calcVarPart(fit)) #the total.var normalized to 100 
+
+# manually check above 'fit' 
+fit
+fit.summary<-summary(fit)
+# begin manually 'deconstructing' all variance components
+# extract the variance of the random effect which is not captured by the fixed effects.
+(var.random <- as.numeric(fit.summary$varcor))
+names(var.random)<-names(fit.summary$varcor)
+# extract the residual variance 
+(var.residual <- attr(VarCorr(fit), "sc")^2) 
+names(var.residual)<-'Residuals';
+# use the variance of predicted values in a linear model involving the fixed effect alone to 'approximate' variance component that explained by fixed effects.
+X<-model.matrix(~-1+Age,data=info)
+var.fixed<-var(X %*% fixef(fit)[[2]])[[1]]
+names(var.fixed)='Age'
+
+# total variance in the response variable(gene1 expression values across all samples)
+var(geneExpr[1,])
+sum(var.random+var.fixed+var.residual) 
+c(var.random,var.fixed,var.residual)/sum(var.random+var.residual+var.fixed)
+calcVarPart(fit) #not exactly... but pretty close
+
+# refit the first gene expression with two fixed effects
+fit <- lmer(geneExpr[1,] ~ Age + Height+(1|Individual) + (1|Tissue), info, REML=FALSE )
+calcVarPart(fit)
+
+# manually check above 'fit' 
+fit.summary<-summary(fit)
+(var.random <- as.numeric(fit.summary$varcor))
+names(var.random)<-names(fit.summary$varcor)
+(var.residual <- attr(VarCorr(fit), "sc")^2) 
+names(var.residual)<-'Residuals';
+
+X<-model.matrix(~-1+Age+Height,data=info)
+var.fixed1<-var(X[,1,drop=F] * fixef(fit)[[2]])[[1]]
+var.fixed2<-var(X[,1,drop=F] * fixef(fit)[[3]])[[1]]
+names(var.fixed1)='Age'
+names(var.fixed2)='Height'
+
+var(geneExpr[1,])
+sum(var.random+var.fixed1+var.fixed2+var.residual) 
+c(var.random,var.fixed1,var.fixed2,var.residual)/sum(var.random+var.fixed1+var.fixed2+var.residual) 
+calcVarPart(fit) #yeah... there is certainly some difference for fixed effect
+
+# refit again...
+fit <- lmer(geneExpr[1,] ~ Age + Height+(1|Batch)+(1|Individual) + (1|Tissue), info, REML=FALSE )
+calcVarPart(fit)
+
+# manually check above 'fit' 
+fit.summary<-summary(fit)
+(var.random <- as.numeric(fit.summary$varcor))
+names(var.random)<-names(fit.summary$varcor)
+(var.residual <- attr(VarCorr(fit), "sc")^2) 
+names(var.residual)<-'Residuals';
+
+X<-model.matrix(~-1+Age+Height,data=info)
+var.fixed1<-var(X[,1,drop=F] * fixef(fit)[[2]])[[1]]
+var.fixed2<-var(X[,1,drop=F] * fixef(fit)[[3]])[[1]]
+names(var.fixed1)='Age'
+names(var.fixed2)='Height'
+
+var(geneExpr[1,])
+sum(var.random+var.fixed1+var.fixed2+var.residual) 
+c(var.random,var.fixed1,var.fixed2,var.residual)/sum(var.random+var.fixed1+var.fixed2+var.residual) 
+calcVarPart(fit)#crap... the difference becomes bigger...
+```
+
+
+<br>
+
+I was just curious how they 'actually' partition the variance and began to look at their source code. Btw, I think learning through the source code is an effective way and I share something from the book ***[Advanced R](https://adv-r.hadley.nz/)*** by one of my favorite statisticians Hadley Wickham as below:
+
+>
+**1.5 Meta-techniques**  
+There are two meta-techniques that are tremendously helpful for improving your skills as an R programmer: reading source code and adopting a scientific mindset. 
+>
+- Reading source code is important because it will help you write better code. A great place to start developing this skill is to look at the source code of the functions and packages you use most often. You’ll find things that are worth emulating in your own code and you’ll develop a sense of taste for what makes good R code. You will also see things that you don’t like, either because its virtues are not obvious or it offends your sensibilities. Such code is nonetheless valuable, because it helps make concrete your opinions on good and bad code.  
+- A scientific mindset is extremely helpful when learning R. If you don’t understand how something works, you should develop a hypothesis, design some experiments, run them, and record the results. This exercise is extremely useful since if you can’t figure something out and need to get help, you can easily show others what you tried. Also, when you learn the right answer, you’ll be mentally prepared to update your world view.
+
+
+
+So back to topic, I checked their source code to make sure they were not playing tricks!
+
+From my understanding, 
+the basic assumption here is: `total.var = random.var + fixed.var + error/residue`.
+
+The procedures of getting values for above terms are:
+
+1) `random.var`: variance explained by random predictors, are extracted from the output of lmer() function
+
+2) `error/residue`: variance failed to be captured by this mixed model, are extracted from the output of lmer() function
+
+3) `fixed var`: This is the trickly part!!! how to get variance explained by fixed predictors.
+
+One way to get some numbers out is:
+
+Since mixed model estimate beta coefficients for fixed predictors, they calculate fitted response values with each fixed predictor alone.
+
+Say you have two predictors, with each predictor alone, you get a set of fitted values.
+
+- then with the fitted values using predictor 1 alone, you calculate the variance.
+- with the fitted values using predictor 2 alone, you calculate the variance.
+
+These two variance values represent the variance explained by fixed predictors.
+
+I did some validation shown as above and compared my calculation with the function’s output: summed up each component explained variance and calculated the response variable variance, check if they satisfy `total.var = random.var + fixed.var + error/residue`, as well as the explained variance propotion.  
+
+It seems with only one fixed effect, the discrepancy is not that large, but when I involve more fixed effects in the mixed model, my way of calculating the variance components begin to drift away from their results...
+
+I think it's OK and it may be due to my crappy 'validation' approach,( [also shown here](https://sites.google.com/site/alexandrecourtiol/what-did-i-learn-today/inrhowtoextractthedifferentcomponentsofvarianceinalinearmixedmodel)). In the package souce code, their implementation is more complicated and delicate.
+
+Finally, some more code demonstrating the `variancePartition` package utility (just copy and paste from the package documentation)
+
+```{r echo=T,results='markup'}
+# model form
+form <- ~ Age + (1|Individual) + (1|Tissue) + (1|Batch)
+# model fitting and variance extraction in one step
+varPart <- fitExtractVarPartModel( geneExpr, form, info )
+
+# sort result
+vp <- sortCols( varPart )
+# and plot
+plotPercentBars( vp[1:10,] )
+
+# violin plot of each variable contribution to total variance 
+plotVarPart( vp )
+```
+
+
