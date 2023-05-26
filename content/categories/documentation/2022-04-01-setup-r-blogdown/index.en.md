@@ -70,6 +70,7 @@ When done, use `knit` to check the Rmarkdown file contain no bug (you may need t
 
 Restart R, in the blog folder, use `serve site` in the `Addins` to generate the website page.
 
+# Feel free to delete `themes/LoveIt/exampleSite/` folder.
 
 Useful tutorial:
 

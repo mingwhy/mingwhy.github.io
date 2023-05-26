@@ -1,0 +1,116 @@
+---
+title: Plot degree distribution in a network
+author: Ming
+date: '2022-04-15'
+slug: []
+categories:
+  - R
+tags:
+  - data visualization
+  - network
+  - igraph
+subtitle: ''
+lastmod: '2023-05-26T15:06:44-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,message = F,warning = F,
+                      fig.width=6,fig.height=4,fig.align='center')
+                      #fig.show='hold')
+library(knitr)
+library(tidyverse)
+```
+## generate a random graph 
+```{r}
+library(igraph)
+set.seed(123)
+g.ba<-barabasi.game(10000,directed=F)
+plot(g.ba,layout=layout.circle,vertex.label=NA)
+d<-degree(g.ba)
+hist(d,col='lightblue',xlab='Degree',ylab='Frequency',main='')
+summary(d)
+```
+
+## log-log plot
+
+```{r}
+dt<-table(d)
+df=data.frame(degree=names(dt),count=as.numeric(dt))
+df$freq=df$count/sum(df$count)
+library(ggplot2)
+df$degree=as.numeric(as.character(df$degree))
+ggplot(df,aes(x=df$degree,y=df$freq))+geom_point()+theme_bw()+xlab('Degree')+ylab('Freq')
+ggplot(df,aes(x=df$degree,y=df$freq))+geom_point()+theme_bw()+xlab('Degree')+ylab('Freq')+scale_x_log10()+scale_y_log10()
+```
+
+## logarithmic binning plot
+```{r}
+bin.step=2
+max(df$count)
+log(max(df$count),base=bin.step);
+up=floor(log(max(df$count),base=bin.step))
+
+bin.size=2^(0:up)
+bin.left.bound=cumsum(2^(0:up))
+bucket = cut(d,breaks = bin.left.bound,right = FALSE,labels = c(paste0('< ',scales::comma(c(2^(1:up))))))
+x<-table(bucket)
+df<-data.frame(bin.left.bound=bin.left.bound[1:length(x)],count=as.numeric(x),label=names(x))
+df$freq=df$count/sum(df$count)
+ggplot(df[df$freq!=0,],aes(x=bin.left.bound,y=freq))+geom_point()+theme_bw()+xlab('Degree')+ylab('Freq')+scale_x_log10()+scale_y_log10()+ggtitle('log2 binning')
+
+```
+
+## cumulative density plot and complementary cumulative distribution function
+```{r}
+dt<-table(d)
+df=data.frame(degree=names(dt),count=as.numeric(dt))
+df$freq=df$count/sum(df$count)
+df$cumfreq = cumsum(df$freq)
+df$degree=as.numeric(as.character(df$degree))
+ggplot(df,aes(x=df$degree,y=df$cumfreq))+geom_point()+theme_bw()+xlab('Degree')+ylab('Freq')+scale_x_log10()+scale_y_log10()+ggtitle("CDF plot on log-log scale")
+
+df$ccdf=1-df$cumfreq
+ggplot(df,aes(x=df$degree,y=df$ccdf))+geom_point()+theme_bw()+xlab('Degree')+ylab('Freq')+scale_x_log10()+scale_y_log10()+ggtitle("CCDF plot on log-log scale")
+
+
+```
+
+```{r}
+installed.packages()[names(sessionInfo()$otherPkgs), "Version"]
+``` 
+
+
