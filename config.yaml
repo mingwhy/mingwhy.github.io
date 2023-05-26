@@ -1,0 +1,587 @@
+baseURL: https://mingwhy.github.io/
+theme: LoveIt
+title: LoveIt
+defaultContentLanguage: en
+languageCode: en
+languageName: English
+hasCJKLanguage: no
+paginate: 12
+googleAnalytics: ''
+copyright: ''
+enableRobotsTXT: yes
+enableGitInfo: yes
+enableEmoji: yes
+ignoreErrors:
+  - error-remote-getjson
+  - error-missing-instagram-accesstoken
+author:
+  email: 'yangming.sysu@gmail.com'
+  link: ''
+  name: Ming
+menu:
+  main:
+    - identifier: posts
+      name: Posts
+      post: ''
+      pre: ''
+      title: ''
+      url: /posts/
+      weight: 1
+    - identifier: tags
+      name: Tags
+      post: ''
+      pre: ''
+      title: ''
+      url: /tags/
+      weight: 2
+    - identifier: categories
+      name: Categories
+      post: ''
+      pre: ''
+      title: ''
+      url: /categories/
+      weight: 3
+params:
+  analytics:
+    enable: no
+    fathom:
+      id: ''
+      server: ''
+    google:
+      anonymizeIP: yes
+      id: ''
+    plausible:
+      dataDomain: ''
+    yandexMetrica:
+      id: ''
+  app:
+    iconColor: '#5bbad5'
+    noFavicon: no
+    svgFavicon: ''
+    themeColor: '#ffffff'
+    tileColor: '#da532c'
+    title: LoveIt
+  cdn:
+    data: jsdelivr.yml
+  compatibility:
+    objectFit: no
+    polyfill: no
+  cookieconsent:
+    content:
+      dismiss: ''
+      link: ''
+      message: ''
+    enable: no
+  dateFormat: '2006-01-02'
+  defaultTheme: auto
+  description: Hugo theme - LoveIt
+  fingerprint: ''
+  footer:
+    author: yes
+    copyright: yes
+    custom: ''
+    enable: yes
+    hugo: yes
+    icp: ''
+    license: <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/"
+      target="_blank">CC BY-NC 4.0</a>
+    since: 2019
+  gitRepo: https://github.com/dillonzq/LoveIt
+  header:
+    desktopMode: fixed
+    mobileMode: auto
+    title:
+      logo: ''
+      name: LoveIt
+      post: ''
+      pre: <i class='far fa-kiss-wink-heart fa-fw' aria-hidden='true'></i>
+      typeit: no
+  home:
+    posts:
+      enable: yes
+      paginate: 6
+    profile:
+      avatarURL: /images/ming.jpeg
+      disclaimer: ''
+      enable: yes
+      gravatarEmail: ''
+      social: yes
+      subtitle: Computational biologist in University of Washington
+      title: ''
+      typeit: yes
+    rss: 10
+  images: /logo.png
+  list:
+    dateFormat: 01-02
+    paginate: 20
+    rss: 10
+  page:
+    code:
+      copy: yes
+      maxShownLines: 50
+    comment:
+      commento:
+        enable: no
+      disqus:
+        enable: no
+        shortname: ''
+      enable: yes
+      facebook:
+        appId: ''
+        enable: no
+        languageCode: ''
+        numPosts: 10
+        width: 100%
+      giscus:
+        category: Announcements
+        categoryId: ''
+        darkTheme: dark
+        emitMetadata: '0'
+        enable: no
+        inputPosition: bottom
+        lang: ''
+        lazyLoading: no
+        lightTheme: light
+        mapping: pathname
+        reactionsEnabled: '1'
+        repo: ''
+        repoId: ''
+      gitalk:
+        clientId: ''
+        clientSecret: ''
+        enable: no
+        owner: ''
+        repo: ''
+      telegram:
+        color: ''
+        colorful: yes
+        dislikes: no
+        enable: no
+        height: ''
+        limit: 5
+        outlined: no
+        siteID: ''
+      utterances:
+        darkTheme: github-dark
+        enable: no
+        issueTerm: pathname
+        label: ''
+        lightTheme: github-light
+        repo: ''
+      valine:
+        appId: QGzwQXOqs5JOhN4RGPOkR2mR-MdYXbMMI
+        appKey: WBmoGyJtbqUswvfLh6L8iEBr
+        avatar: mp
+        emoji: ''
+        enable: yes
+        enableQQ: no
+        highlight: yes
+        lang: ''
+        meta: ''
+        pageSize: 10
+        placeholder: ''
+        recordIP: yes
+        serverURLs: https://leancloud.hugoloveit.com
+        visitor: yes
+    fontawesome: yes
+    fraction: yes
+    hiddenFromHomePage: no
+    hiddenFromSearch: no
+    library:
+      css: {}
+      js: {}
+    lightgallery: no
+    linkToMarkdown: yes
+    mapbox:
+      accessToken: pk.eyJ1IjoiZGlsbG9uenEiLCJhIjoiY2s2czd2M2x3MDA0NjNmcGxmcjVrZmc2cyJ9.aSjv2BNuZUfARvxRYjSVZQ
+      darkStyle: mapbox://styles/mapbox/dark-v10?optimize=true
+      fullscreen: yes
+      geolocate: yes
+      lightStyle: mapbox://styles/mapbox/light-v10?optimize=true
+      navigation: yes
+      scale: yes
+    math:
+      blockLeftDelimiter: ''
+      blockRightDelimiter: ''
+      copyTex: yes
+      enable: no
+      inlineLeftDelimiter: ''
+      inlineRightDelimiter: ''
+      mhchem: yes
+    rssFullText: no
+    ruby: yes
+    seo:
+      images: []
+      publisher:
+        logoUrl: /images/avatar.png
+        name: Ming
+    share:
+      Baidu: no
+      Blogger: no
+      Buffer: no
+      Evernote: no
+      Facebook: yes
+      Flipboard: no
+      HackerNews: yes
+      Instapaper: no
+      Line: yes
+      Linkedin: no
+      Mix: no
+      Odnoklassniki: no
+      Pinterest: no
+      Pocket: no
+      Reddit: no
+      Skype: no
+      Trello: no
+      Tumblr: no
+      Twitter: yes
+      VK: no
+      Weibo: yes
+      Whatsapp: no
+      Xing: no
+      enable: yes
+    toc:
+      auto: yes
+      enable: yes
+      keepStatic: no
+    twemoji: no
+  search:
+    absoluteURL: no
+    algolia:
+      appID: ''
+      index: ''
+      searchKey: ''
+    contentLength: 4000
+    enable: yes
+    highlightTag: em
+    maxResultLength: 10
+    placeholder: ''
+    snippetLength: 30
+    type: algolia
+  section:
+    dateFormat: 01-02
+    paginate: 20
+    rss: 10
+  seo:
+    image: /images/Apple-Devices-Preview.png
+    thumbnailUrl: /images/screenshot.png
+  social:
+    Angellist: ''
+    Bandcamp: ''
+    Behance: ''
+    Bilibili: ''
+    Bitbucket: ''
+    Codepen: ''
+    Deviantart: ''
+    Devto: ''
+    Discord: ''
+    DiscordInvite: ''
+    Douban: ''
+    Dribbble: ''
+    Email: ''
+    Facebook: ''
+    Fivehundredpx: ''
+    Flickr: ''
+    Foursquare: ''
+    FreeCodeCamp: ''
+    GitHub: ''
+    Gitea: ''
+    Gitlab: ''
+    Goodreads: ''
+    Googlescholar: ''
+    HackTheBox: ''
+    Hackernews: ''
+    Instagram: ''
+    Jsfiddle: ''
+    Kaggle: ''
+    Keybase: ''
+    Kickstarter: ''
+    Lastfm: ''
+    Lichess: ''
+    Linkedin: ''
+    Mastodon: ''
+    Matrix: ''
+    MediaWiki: ''
+    Medium: ''
+    Mix: ''
+    ORCID: ''
+    Odnoklassniki: ''
+    Patreon: ''
+    Paypal: ''
+    Pinterest: ''
+    Pleroma: ''
+    Plume: ''
+    Quora: ''
+    RSS: ''
+    Reddit: ''
+    Researchgate: ''
+    RootMe: ''
+    Skype: ''
+    Slidershare: ''
+    Snapchat: ''
+    Soundcloud: ''
+    Spotify: ''
+    Stackoverflow: ''
+    Steam: ''
+    Strava: ''
+    Telegram: ''
+    Thingiverse: ''
+    Tumblr: ''
+    Twitch: ''
+    Twitter: ''
+    VK: ''
+    Vine: ''
+    Weibo: ''
+    Whatsapp: ''
+    Wordpress: ''
+    XMPP: ''
+    Xing: ''
+    Youtubechannel: ''
+    Youtubecustom: ''
+    Youtubelegacy: ''
+    Zhihu: ''
+  title: LoveIt
+  typeit:
+    cursorChar: '|'
+    cursorSpeed: 1000
+    duration: -1
+    speed: 100
+  verification:
+    baidu: ''
+    bing: ''
+    google: ''
+    pinterest: ''
+    yandex: ''
+markup:
+  goldmark:
+    extensions:
+      definitionList: yes
+      footnote: yes
+      linkify: yes
+      strikethrough: yes
+      table: yes
+      taskList: yes
+      typographer: yes
+    renderer:
+      unsafe: yes
+  highlight:
+    codeFences: yes
+    guessSyntax: yes
+    lineNos: yes
+    lineNumbersInTable: yes
+    noClasses: no
+  tableOfContents:
+    endLevel: 6
+    startLevel: 2
+sitemap:
+  changefreq: weekly
+  filename: sitemap.xml
+  priority: 0.5
+Permalinks:
+  posts: :filename
+privacy:
+  googleAnalytics: {}
+  twitter:
+    enableDNT: yes
+  youtube:
+    privacyEnhanced: yes
+mediaTypes:
+  text/plain:
+    suffixes: md
+outputFormats:
+  MarkDown:
+    isHTML: no
+    isPlainText: yes
+    mediaType: text/plain
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+  page:
+    - HTML
+    - MarkDown
+  section:
+    - HTML
+    - RSS
+  taxonomy:
+    - HTML
+    - RSS
+  taxonomyTerm: HTML
+languages:
+  en:
+    copyright: This work is licensed under a Creative Commons Attribution-NonCommercial
+      4.0 International License.
+    hasCJKLanguage: no
+    languageCode: en
+    languageName: English
+    menu:
+      main:
+        - identifier: posts
+          name: Posts
+          post: ''
+          pre: ''
+          title: ''
+          url: /posts/
+          weight: 1
+        - identifier: categories
+          name: Categories
+          post: ''
+          pre: ''
+          title: ''
+          url: /categories/
+          weight: 3
+        - identifier: tags
+          name: Tags
+          post: ''
+          pre: ''
+          title: ''
+          url: /tags/
+          weight: 2
+        #- identifier: documentation
+        #  name: Docs
+        #  post: ''
+        #  pre: ''
+        #  title: ''
+        #  url: /categories/documentation/
+        #  weight: 4
+        - identifier: about
+          name: About
+          post: ''
+          pre: ''
+          title: ''
+          url: /about/
+          weight: 5
+        - identifier: github
+          name: ''
+          post: ''
+          pre: <i class='fab fa-github fa-fw' aria-hidden='true'></i>
+          title: GitHub
+          url: https://github.com/mingwhy
+          weight: 6
+    params:
+      home:
+        profile:
+          avatarURL: /images/ming.jpeg
+          disclaimer: ''
+          enable: yes
+          gravatarEmail: ''
+          social: yes
+          subtitle: Computational biologist in University of Washington
+          title: ''
+          typeit: yes
+        rss: 10
+      search:
+        absoluteURL: no
+        algolia:
+          appID: PASDMWALPK
+          index: index.en
+          searchKey: b42948e51daaa93df92381c8e2ac0f93
+        contentLength: 4000
+        enable: yes
+        highlightTag: em
+        maxResultLength: 10
+        placeholder: ''
+        snippetLength: 30
+        type: algolia
+      social:
+        Email: yangming.sysu@gmail.com
+        #Facebook: xxxx
+        GitHub: mingwhy
+        #Instagram: xxxx
+        #Mastodon:
+        #  id: '@xxxx'
+        #  prefix: https://mastodon.technology/
+        #Phone: 555-555-555
+        RSS: yes
+        #Telegram: xxxx
+        Twitter: tiramisu916
+        #Youtubelegacy: xxxx
+    weight: 1
+  zh-cn:
+    copyright: This work is licensed under a Creative Commons Attribution-NonCommercial
+      4.0 International License.
+    hasCJKLanguage: yes
+    languageCode: zh-CN
+    languageName: 简体中文
+    menu:
+      main:
+        - identifier: posts
+          name: 所有文章
+          post: ''
+          pre: ''
+          title: ''
+          url: /posts/
+          weight: 1
+        - identifier: tags
+          name: 标签
+          post: ''
+          pre: ''
+          title: ''
+          url: /tags/
+          weight: 2
+        - identifier: categories
+          name: 分类
+          post: ''
+          pre: ''
+          title: ''
+          url: /categories/
+          weight: 3
+        #- identifier: documentation
+        #  name: 文档
+        #  pre: ''
+        #  title: ''
+        #  url: /categories/documentation/
+        #  weight: 4
+        - identifier: about
+          name: 关于
+          post: ''
+          pre: ''
+          title: ''
+          url: /about/
+          weight: 5
+        - identifier: github
+          name: ''
+          post: ''
+          pre: <i class='fab fa-github fa-fw' aria-hidden='true'></i>
+          title: GitHub
+          url: https://github.com/mingwhy
+          weight: 6
+    params:
+      home:
+        profile:
+          avatarURL: /images/ming.jpeg
+          disclaimer: ''
+          enable: yes
+          gravatarEmail: ''
+          social: yes
+          #subtitle: 一个简洁、优雅且高效的 Hugo 主题
+          title: ''
+          typeit: yes
+        rss: 10
+      search:
+        absoluteURL: no
+        algolia:
+          appID: PASDMWALPK
+          index: index.zh-cn
+          searchKey: b42948e51daaa93df92381c8e2ac0f93
+        contentLength: 4000
+        enable: yes
+        highlightTag: em
+        maxResultLength: 10
+        placeholder: ''
+        snippetLength: 50
+        type: algolia
+      social:
+        #Bilibili: xxxx
+        #Devto: xxxx
+        #Douban: xxxx
+        Email: yangming.sysu@gmail.com
+        GitHub: mingwhy        
+        Twitter: tiramisu916
+        #Phone: 555-555-555
+        RSS: yes
+        #Steam: xxxx
+        #Weibo: xxxx
+        #Zhihu: xxxx
+    weight: 2

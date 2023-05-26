@@ -1,0 +1,117 @@
+---
+title: Linear Regression - Anova
+author: Ming
+date: '2022-04-04'
+slug: []
+categories:
+  - R
+tags:
+  - linear regression
+  - statistics
+subtitle: ''
+lastmod: '2023-05-26T12:56:56-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+
+</div>
+
+<p>在阅读文献时候，常遇到一个lm （linear regression）后，紧跟就是一个anova。</p>
+<p>linear regression和anova是什么关系呢？</p>
+<p>不如直接看<a href="https://stats.stackexchange.com/questions/115304/interpreting-output-from-anova-when-using-lm-as-input">一个例子</a>.</p>
+<pre class="r"><code>set.seed(897)    # this makes the example exactly reproducible
+y     = c(rnorm(10, mean=0,   sd=1),
+          rnorm(10, mean=-.5, sd=1),
+          rnorm(10, mean=.5,  sd=1) )
+g     = rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;), each=10)
+model = lm(y~g)
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ g)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.6315 -0.5772 -0.2407  0.5778  1.7913 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  0.23057    0.31191   0.739    0.466  
+## gB          -0.96251    0.44111  -2.182    0.038 *
+## gC          -0.07276    0.44111  -0.165    0.870  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9864 on 27 degrees of freedom
+## Multiple R-squared:  0.1794, Adjusted R-squared:  0.1187 
+## F-statistic: 2.952 on 2 and 27 DF,  p-value: 0.06925</code></pre>
+<pre class="r"><code>anova(model)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: y
+##           Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
+## g          2  5.7446  2.8723  2.9523 0.06925 .
+## Residuals 27 26.2684  0.9729                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>上面这个pseudo-dataset，用lm和anova，得到的P value是一致的。</p>
+<p>在<a href="https://www.utstat.toronto.edu/~brunner/books/LinearModelsWithR.pdf">Linear Models With R</a> by Julian Faraway 这本书中，Chapter 3解释了anova和lm搅和在一起的是是非非。</p>
+<p>首先是，在predictor是categorical data，response是numerical data的情况下，<strong>拟合一个lm模型，就是在做一个统计检验hypothesis testing</strong>.</p>
+<ul>
+<li>Anova test的是组与组之间是否有显著的差别， 是大家共享用一个mean，还是不同组别间mean的不同（用的是variance partition的方法）。如果mean不同，那么每个组别自己的mean是什么。</li>
+<li>用lm来做估计不同组别各自mean的事情。然后找一个方法来test，一个grand mean好，还是一个组别一个mean好。</li>
+</ul>
+<p>做lm后，会有一个量汇报出来，RSS，拟合模型所不能解释的变异有多少。可以想见，一个组别一个mean模型所不能解释的方差肯定比grand mean要小，毕竟参数多。
+那么，w指的是小模型，即grand mean。Omega指的是大模型，即lm。</p>
+<p><img src="pic1.png" />
+就会是一个蛮好的检验统计量test statistic，并且它一定是一个非负数。</p>
+<p><img src="pic2.png" /></p>
+<p>如果这个统计量大于一定数值的话，就说明小模型能解释的东东太少了，或者大模型是在太强大了，能解释大部分数据的变异。那么就就拒绝小模型，接受大模型lm。</p>
+<p>Anova的设计便是如此。</p>
+<p><img src="pic3.png" /></p>
+<p>我们来算一个F统计量，大于一定数值之后，F分布的尾部面积就太小，那么就拒绝原假设，接受lm。</p>
+<p>对于lm而言，
+<img src="pic4.png" /></p>
+<p>小模型自由度为dfw：n-1</p>
+<p>大模型自由度为dfomega：n-p</p>
+<p>所以dfw-dfomega = (n-1)-(n-p) = p-1</p>
+<p><img src="pic5.png" /></p>
+<p>所以才经常会看到上面这种表格。
+用的东西实际上是模型所不能解释的数据的变异性。
+Source那一栏中，Regression是anova F统计量的分子,表示经过自由度矫正的两个模型所不能解释的残差的差别；Residual是分母，表示大模型所不能解释的残差的大小。</p>
+<!--more-->
