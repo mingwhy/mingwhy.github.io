@@ -64,13 +64,15 @@ Just save images in in the same folder as the post document, for example, `posts
 
 # post a new Rmarkdown-generated file
 
-Choose `.Rmarkdown` format in `New Post` and start writing.
+Choose `.Rmd` format in `New Post` and start writing.
 
 When done, use `knit` to check the Rmarkdown file contain no bug (you may need to change to the working folder if there requires reading in data files), then delete the `.html` file. 
 
 Restart R, in the blog folder, use `serve site` in the `Addins` to generate the website page.
 
-# Feel free to delete `themes/LoveIt/exampleSite/` folder.
+# tricks
+- I used `.Rmd` instead of `.Rmarkdown`. `.Rmd` leads to `.html` file and `.Rmarkdown` to `.markdown` file when `serve site`. Both viewed fine on my laptop, but only `html` show all R plots when deployed on netlify.
+- Feel free to delete `themes/LoveIt/exampleSite/` folder.
 
 Useful tutorial:
 
