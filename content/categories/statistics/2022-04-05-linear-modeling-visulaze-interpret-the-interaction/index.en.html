@@ -1,0 +1,283 @@
+---
+title: 'Linear modeling: Visulaze & Interpret the Interaction'
+author: Ming
+date: '2022-04-05'
+slug: []
+categories:
+  - statistics
+  - R
+tags:
+  - statistics
+  - linear regression
+subtitle: ''
+lastmod: '2023-05-26T14:07:59-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+<script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
+
+<div id="TOC">
+
+</div>
+
+<div id="basic-model" class="section level2">
+<h2>basic model</h2>
+<p><span class="math inline">\(y = b0 + b1*x1 + b2*x2 + b3*(x1+x2)\)</span></p>
+</div>
+<div id="scenario-1-one-numeric-one-factor" class="section level2">
+<h2>Scenario 1: one numeric + one factor</h2>
+<div id="load-the-data" class="section level3">
+<h3>load the data</h3>
+<pre class="r"><code>library(tidyverse)
+data(mtcars)
+glimpse(mtcars)</code></pre>
+<pre><code>## Rows: 32
+## Columns: 11
+## $ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8,…
+## $ cyl  &lt;dbl&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8,…
+## $ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7, 140.8, 16…
+## $ hp   &lt;dbl&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180, 180, 180…
+## $ drat &lt;dbl&gt; 3.90, 3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.92, 3.92,…
+## $ wt   &lt;dbl&gt; 2.620, 2.875, 2.320, 3.215, 3.440, 3.460, 3.570, 3.190, 3.150, 3.…
+## $ qsec &lt;dbl&gt; 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20.00, 22.90, 18…
+## $ vs   &lt;dbl&gt; 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,…
+## $ am   &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,…
+## $ gear &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3,…
+## $ carb &lt;dbl&gt; 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, 1, 1, 2,…</code></pre>
+<pre class="r"><code># to start with, visualize each predictor effect separately
+par(mfrow=c(1,2),mar=c(3,3,1,1))
+plot(mtcars$disp,mtcars$mpg)
+boxplot(mpg~vs,data=mtcars)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-1-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># try to have a holistic view
+ggplot(data=mtcars,aes(x=disp,y=mpg))+geom_point()+facet_wrap(.~vs)+theme_bw(base_size = 15)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-1-2.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># make it even simple and clear
+ggplot(data=mtcars,aes(x=disp,y=mpg,col=factor(vs)))+geom_point()+theme_bw(base_size = 15)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-1-3.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Asking ‘is there interaction between <code>disp</code> and <code>vs</code>’, is like asking: if I fit lines for green dots and red dots separately,</p>
+<ul>
+<li>would the two lines be the same?</li>
+<li>have different intercept?</li>
+<li>have different slopes?</li>
+</ul>
+</div>
+<div id="build-two-linear-models" class="section level3">
+<h3>build two linear models</h3>
+<pre class="r"><code>m0&lt;-lm(mpg~disp+vs,data=mtcars)
+m1&lt;-lm(mpg~disp*vs,data=mtcars)
+anova(m0,m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: mpg ~ disp + vs
+## Model 2: mpg ~ disp * vs
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     29 308.44                              
+## 2     28 246.91  1    61.527 6.9772 0.01335 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The <code>anova</code> shows linear model with the interaction term, <code>m1</code> in the above code, fits the data slightly better with a pvalue 0.01335.</p>
+<p>Then how to interpret the <code>m0</code> and <code>m1</code> models?</p>
+<p>As the basic linear model is: <span class="math inline">\(y = b0 + b1*x1 + b2*x2 + b3*(x1+x2)\)</span><br />
+in our case, x1=disp, x2=vs</p>
+</div>
+<div id="interprete-the-model-without-interaction" class="section level3">
+<h3>interprete the model without interaction</h3>
+<p>for model <code>m0</code>: <span class="math inline">\(y = b0 + b1*disp + b2*vs\)</span></p>
+<ul>
+<li><strong>vs=0</strong>, <span class="math inline">\(y = b0 + b1*disp\)</span></li>
+<li><strong>vs=1</strong>, <span class="math inline">\(y = b0 + b1*disp + b2\)</span>
+<br> or, <span class="math inline">\(y = b0 +b2 + b1*disp\)</span></li>
+</ul>
+<p>Thus, without the interaction term, the effect of <code>vs</code> only show up for the intercept, which means there are two parallele lines for blue and red dots.</p>
+<pre class="r"><code>(x=coef(m0))</code></pre>
+<pre><code>## (Intercept)        disp          vs 
+## 27.94928175 -0.03689603  1.49500359</code></pre>
+<pre class="r"><code>ggplot(data=mtcars,aes(x=disp,y=mpg,col=factor(vs)))+geom_point()+theme_bw(base_size = 15)+
+  geom_abline(intercept = x[1], slope = x[2], color=&quot;#F8766D&quot;, 
+                 linetype=&quot;dashed&quot;, size=1)+ 
+  geom_abline(intercept = x[1]+x[3], slope = x[2], color=&quot;#00BFC4&quot;, 
+                 linetype=&quot;dashed&quot;, size=1)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-3-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>To interpret <code>m0</code>,</p>
+<ul>
+<li>holding <code>vs</code> constant, if increase <code>disp</code> by 100, the <code>mpg</code> would increase b1*100 = -3.6896028.</li>
+<li>holding <code>disp</code> constant, cars with <code>vs=1</code> is b2 = 1.4950036 larger than <code>vs=0</code> ones.</li>
+</ul>
+</div>
+<div id="interprete-the-model-with-interaction" class="section level3">
+<h3>interprete the model with interaction</h3>
+<p>for model <code>m1</code>: <span class="math inline">\(y = b0 + b1*disp + b2*vs + b3*disp*vs\)</span></p>
+<ul>
+<li><strong>vs=0</strong>, <span class="math inline">\(y = b0 + b1*disp\)</span></li>
+<li><strong>vs=1</strong>, <span class="math inline">\(y = b0 + b1*disp + b2 + b3*disp\)</span>
+<br> or, <span class="math inline">\(y = b0 +b2 + (b1+b3)*disp\)</span></li>
+</ul>
+<p>Thus, with the interaction term, the effect of <code>vs</code> show up both for the intercept and the slope, which means the lines would intercross.</p>
+<pre class="r"><code>(x=coef(m1)) #b0,b1,b2,b3</code></pre>
+<pre><code>## (Intercept)        disp          vs     disp:vs 
+## 25.63755459 -0.02936965  8.39770888 -0.04218648</code></pre>
+<pre class="r"><code>ggplot(data=mtcars,aes(x=disp,y=mpg,col=factor(vs)))+geom_point()+theme_bw(base_size = 15)+
+  geom_abline(intercept = x[1], slope = x[2], color=&quot;#F8766D&quot;, 
+                 linetype=&quot;dashed&quot;, size=1)+ 
+  geom_abline(intercept = x[1]+x[3], slope = x[2]+x[4], color=&quot;#00BFC4&quot;, 
+                 linetype=&quot;dashed&quot;, size=1)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-4-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>To interpret <code>m1</code>,</p>
+<ul>
+<li>holding <code>vs</code> constant, if increase <code>disp</code> by 100,
+<ul>
+<li>if <code>vs=0</code>, the <code>mpg</code> would increase b1*100 = -2.936965.</li>
+<li>if <code>vs=1</code>, the <code>mpg</code> would increase (b1+b3)*100 = -7.1556131.</li>
+</ul></li>
+<li>holding <code>disp</code> constant, cars with <code>vs=1</code> is b2+b3*disp = 8.3977089 + -0.0421865*disp larger than <code>vs=0</code> ones.</li>
+</ul>
+</div>
+</div>
+<div id="scenario-2-one-factor-one-factor" class="section level2">
+<h2>Scenario 2: one factor + one factor</h2>
+<p>Basic linear model: <span class="math inline">\(y = b0 + b1*x1 + b2*x2 + b3*(x1+x2)\)</span><br />
+in this case, x1=am, x2=vs</p>
+<pre class="r"><code># to start with, visualize each predictor effect separately
+par(mfrow=c(1,2),mar=c(3,3,1,1))
+boxplot(mpg~am,data=mtcars)
+boxplot(mpg~vs,data=mtcars)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># try to have a holistic view
+ggplot(data=mtcars,aes(x=factor(am),y=mpg))+geom_boxplot()+facet_wrap(.~vs)+theme_bw(base_size = 15)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-2.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># make it even simple and clear
+ggplot(data=mtcars,aes(x=factor(am),y=mpg,col=factor(vs)))+geom_boxplot()+theme_bw(base_size = 15)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-3.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(data=mtcars,aes(x=factor(am),y=mpg,col=factor(vs)))+
+  geom_line(aes(group=factor(vs)),position = position_dodge(width = 0.5))+geom_point(position = position_dodge(width = 0.5))+theme_bw(base_size = 15)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-4.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m0=lm(mpg~vs+am,data=mtcars)
+m1=lm(mpg~vs*am,data=mtcars)
+anova(m0,m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: mpg ~ vs + am
+## Model 2: mpg ~ vs * am
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     29 353.49                           
+## 2     28 337.48  1    16.009 1.3283 0.2589</code></pre>
+<p><strong>without interaction</strong> <span class="math inline">\(y = b0 + b1*am + b2*vs\)</span></p>
+<ul>
+<li><strong>vs=0</strong>, <span class="math inline">\(y = b0 + b1*am\)</span></li>
+<li><strong>vs=1</strong>, <span class="math inline">\(y = b0 + b2 + b1*am\)</span></li>
+</ul>
+<p>Similarly,</p>
+<ul>
+<li><strong>am=0</strong>, <span class="math inline">\(y = b0 + b2*vs\)</span></li>
+<li><strong>am=1</strong>, <span class="math inline">\(y = b0 + b1 + b2*vs\)</span></li>
+</ul>
+<p>The effect of <code>am</code> or <code>vs</code> does not depend on the other term.</p>
+<ul>
+<li>Holding <code>vs</code> constant, increase of 100 <code>am</code> lead to b1*100 increase in <code>mpg</code>.</li>
+<li>Holding <code>am</code> constant, increase of 100 <code>vs</code> lead to b2*100 increase in <code>mpg</code>.</li>
+</ul>
+<p><strong>with interaction</strong> <span class="math inline">\(y = b0 + b1*am + b2*vs + b3*am*vs\)</span></p>
+<ul>
+<li><strong>vs=0</strong>, <span class="math inline">\(y = b0 + b1*am\)</span></li>
+<li><strong>vs=1</strong>, <span class="math inline">\(y = b0 + b2 + (b1+b3)*am\)</span></li>
+</ul>
+<p>Similarly,</p>
+<ul>
+<li><strong>am=0</strong>, <span class="math inline">\(y = b0 + b2*vs\)</span></li>
+<li><strong>am=1</strong>, <span class="math inline">\(y = b0 + b1 + (b2+b3)*vs\)</span></li>
+</ul>
+<p>Factors of <code>am</code> or <code>vs</code> affect each other.</p>
+<ul>
+<li>Holding <code>vs</code> constant, increase of 100 <code>am</code> lead to (b1+b3)*100 increase in <code>mpg</code>.</li>
+<li>Holding <code>am</code> constant, increase of 100 <code>vs</code> lead to (b2+b3)*100 increase in <code>mpg</code>.</li>
+</ul>
+</div>
+<div id="scenario-3-one-numeric-one-numeric" class="section level2">
+<h2>Scenario 3: one numeric + one numeric</h2>
+<pre class="r"><code># to start with, visualize each predictor effect separately
+par(mfrow=c(1,2),mar=c(3,3,1,1))
+plot(mpg~disp,data=mtcars)
+plot(mpg~drat,data=mtcars)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-6-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># try to have a holistic view, as it&#39;s two numeric predictor,
+# there is no easy to visualize them
+ggplot(data=mtcars,aes(x=disp,y=mpg,col=drat))+geom_point()+theme_bw(base_size = 15)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-6-2.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m0=lm(mpg~disp+drat,data=mtcars)
+m1=lm(mpg~disp*drat,data=mtcars)
+anova(m0,m1)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: mpg ~ disp + drat
+## Model 2: mpg ~ disp * drat
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     29 302.90                              
+## 2     28 246.88  1     56.02 6.3537 0.01769 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div id="interprete-the-model-without-interaction-1" class="section level3">
+<h3>interprete the model without interaction</h3>
+<p><strong>without interaction</strong> <span class="math inline">\(y = b0 + b1*disp + b2*drat\)</span></p>
+<p>The effect of <code>disp</code> or <code>drat</code> does not depend on the other term.</p>
+<ul>
+<li>Holding <code>drat</code> constant, increase of 100 <code>disp</code> lead to b1*100 increase in <code>mpg</code>.</li>
+<li>Holding <code>disp</code> constant, increase of 100 <code>drat</code> lead to b2*100 increase in <code>mpg</code>.</li>
+</ul>
+<pre class="r"><code>(x=coef(m0))</code></pre>
+<pre><code>## (Intercept)        disp        drat 
+## 21.84487993 -0.03569388  1.80202739</code></pre>
+<pre class="r"><code>g1&lt;-ggplot(data=mtcars,aes(x=disp,y=mpg))+geom_point()+theme_bw(base_size = 15)+xlim(c(0,500))+
+  geom_abline(intercept = x[1], slope = x[2], color=&quot;#F8766D&quot;, 
+                 linetype=&quot;dashed&quot;, size=1)
+g2&lt;-ggplot(data=mtcars,aes(x=drat,y=mpg))+geom_point()+theme_bw(base_size = 15)+xlim(c(0,5))+
+  geom_abline(intercept = x[1], slope = x[3], color=&quot;#00BFC4&quot;, 
+                 linetype=&quot;dashed&quot;, size=1)
+gridExtra::grid.arrange(g1,g2,ncol=2)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-7-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="interprete-the-model-with-interaction-1" class="section level3">
+<h3>interprete the model with interaction</h3>
+<p><strong>without interaction</strong> <span class="math inline">\(y = b0 + b1*disp + b2*drat + b3*disp*drat\)</span></p>
+<p>The effect of <code>disp</code> or <code>drat</code> depends on the other term.</p>
+<ul>
+<li>Holding <code>drat</code> constant, increase of 100 <code>disp</code> lead to (b1+b3*drat)*100 increase in <code>mpg</code>.</li>
+<li>Holding <code>disp</code> constant, increase of 100 <code>drat</code> lead to (b2+b3*disp)*100 increase in <code>mpg</code>.</li>
+</ul>
+<p><br>
+<strong>Some useful ref</strong>
+<a href="https://ademos.people.uic.edu/Chapter13.html#2_continuous_x_continuous_regression" class="uri">https://ademos.people.uic.edu/Chapter13.html#2_continuous_x_continuous_regression</a></p>
+</div>
+</div>

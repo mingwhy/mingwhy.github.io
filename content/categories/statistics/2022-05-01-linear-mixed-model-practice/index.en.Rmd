@@ -1,5 +1,5 @@
 ---
-title: Linear Mixed Model -Practice
+title: Linear Mixed Model - Practice
 author: Ming
 date: '2022-05-01'
 slug: []
