@@ -245,19 +245,19 @@ params:
       enable: yes
       keepStatic: no
     twemoji: no
-  search:
-    absoluteURL: no
-    algolia:
-      appID: ''
-      index: ''
-      searchKey: ''
-    contentLength: 4000
-    enable: yes
-    highlightTag: em
-    maxResultLength: 10
-    placeholder: ''
-    snippetLength: 30
-    type: algolia
+  #search:
+  #  absoluteURL: no
+  #  algolia:
+  #    appID: ''
+  #    index: ''
+  #    searchKey: ''
+  #  contentLength: 4000
+  #  enable: yes
+  #  highlightTag: em
+  #  maxResultLength: 10
+  #  placeholder: ''
+  #  snippetLength: 30
+  #  type: algolia
   section:
     dateFormat: 01-02
     paginate: 20
