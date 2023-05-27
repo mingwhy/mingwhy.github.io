@@ -1,0 +1,175 @@
+---
+title: 'Bioinformatics: GO.db, AnnotationDbi, and clusterProfiler'
+author: Ming
+date: '2022-08-24'
+slug: []
+categories:
+  - R
+  - bioinformatics
+tags:
+  - bioinformatics
+subtitle: ''
+lastmod: '2023-05-26T18:43:01-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message = F,warning = F)
+```
+
+
+```{r}
+# load libraries
+library(GO.db);
+library(AnnotationDbi);
+library(clusterProfiler);
+library(org.Dm.eg.db,verbose=F,quietly=T);
+library(ggplot2)
+```
+
+## fly gene ID mapping via the 'select' function
+```{r}
+# which kinds of data are retrievable via `select`
+columns(org.Dm.eg.db)
+# use keys as query to extract other column information
+set.seed(123)
+(k=sample(keys(org.Dm.eg.db,keytype='SYMBOL'),5))
+AnnotationDbi::select(org.Dm.eg.db,keys=k,keytype="SYMBOL",c("FLYBASE","GENENAME"))
+```
+
+## extracting all fly genes and their annotated GO terms
+```{r}
+all.fly.genes<-keys(org.Dm.eg.db,"FLYBASE")
+length(all.fly.genes)
+
+fb2go=AnnotationDbi::select(org.Dm.eg.db,keys=all.fly.genes,keytype = 'FLYBASE',
+             columns = c('GO'))
+head(fb2go)
+x<-split(fb2go$GO,f=fb2go$FLYBASE)
+x[c(1,2,3)]
+hist(sapply(x,length),xlab='#GO term per gene')
+
+go2fb <- split( fb2go$FLYBASE,f=as.factor( fb2go$GO) )
+str(go2fb[1:3], vec.len=3)
+```
+
+## retrieve GO term full descriptions
+```{r}
+# GO.db usaage info: https://www.bioconductor.org/packages/release/bioc/vignettes/annotate/inst/doc/GOusage.pdf
+# which can be used by `select`
+columns(GO.db)
+set.seed(111)
+go.id<-sample(keys(GO.db,keytype = 'GOID'),5);
+AnnotationDbi::select(GO.db,keys=go.id,keytype ='GOID',
+                        columns=c("DEFINITION","ONTOLOGY","TERM"));
+```
+
+## GO enrichment analysis and visualization
+```{r}
+test.genes=c("ATPsynC","ATPsyngamma","blw","COX6B","COX7A","Cyt-c-p","porin","sesB");
+gene.df <- clusterProfiler::bitr(test.genes, fromType = "SYMBOL",
+                                 toType = c("ENTREZID","FLYBASE","GENENAME"),
+                                 OrgDb = org.Dm.eg.db)
+ego <- enrichGO(gene          = gene.df$ENTREZID,
+                OrgDb         = org.Dm.eg.db,
+                #keyType  = 'SYMBOL',
+                ont           = "BP",
+                #ont           = "MF", 
+                #ont           = "CC", 
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.05,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+
+#use simplify to remove redudant GO terms, a larger cutoff leads to a smaller number of returned GO terms
+#ref: https://guangchuangyu.github.io/2015/10/use-simplify-to-remove-redundancy-of-enriched-go-terms/
+x<-simplify(ego, cutoff=0.7, by="p.adjust", select_fun=min)
+result<-x@result[order(x@result$p.adjust),]
+
+x1=result;
+x1$GeneRatio1=x1$GeneRatio
+x1$GeneRatio=sapply(x1$GeneRatio,function(x){
+  p=as.numeric(unlist(strsplit(x,'/')))
+  p[1]/p[2]
+})
+summary(x1$GeneRatio)
+
+x1=x1[order(x1$p.adjust),]
+x1$desp=factor(x1$Description,levels=rev(x1$Description))
+
+ggplot(subset(x1,Count>=3),aes(x=GeneRatio,y=desp,size=Count,col=p.adjust))+
+  geom_point()+theme_bw(base_size=10)+
+  scale_color_gradient(low="blue", high="red")+
+  scale_size(range = c(1,4))+
+  ylab('Biological Process GO enrichment analysis ')+
+  ggtitle('GO enrichment')+
+  theme(
+    plot.title =element_text(size=9, face='bold'),
+    panel.grid = element_blank(),
+    axis.text=element_text(size=9),
+    axis.title=element_text(size=9),
+    axis.text.x=element_text(size=9,angle=45, hjust=1),
+    axis.text.y=element_text(size=9,angle=0, hjust=1),
+    axis.ticks.y = element_blank())
+```
+
+
+```{r}
+p.adj.cutoff=0.001;
+p.line = -1*log(p.adj.cutoff,base=10)
+x1$log.p.adjust = -1*log(x1$p.adjust,base=10)
+
+ggplot(x1,aes(x=desp,y=log.p.adjust,col=log.p.adjust))+
+      geom_bar(aes(fill=log.p.adjust),stat='identity',width = 0.1)+
+      theme_bw(base_size=10)+ylab('-log10(p.adjust)')+xlab('')+
+      scale_color_distiller(name='',palette = "RdYlBu")+
+      scale_fill_distiller(name='',palette = "RdYlBu")+
+      #scale_color_distiller(name='',palette = "Dark2")+
+      geom_point(size=3)+coord_flip()+
+      geom_hline(yintercept = p.line, linetype="dashed", 
+                 color = "black", size=0.3)+
+      theme(legend.position = 'none',
+            axis.title = element_text(size=9),
+            axis.text.y=element_text(size=6,face="bold"),
+            axis.text.x=element_text(size=9),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank())
+```
+
+
+```{r}
+devtools::session_info()
+```

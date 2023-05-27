@@ -1,0 +1,338 @@
+---
+title: R color scheme
+author: Ming
+date: '2022-09-01'
+slug: []
+categories:
+  - R
+tags:
+  - data visualization
+  - ggplot
+subtitle: ''
+lastmod: '2023-05-26T18:31:23-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+<div id="TOC">
+
+</div>
+
+<div id="discrete-colors" class="section level1">
+<h1>Discrete colors</h1>
+<div id="color-palette" class="section level2">
+<h2>3-color palette</h2>
+<pre class="r"><code># Box plot
+bp&lt;-ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose))) +
+  geom_boxplot()+theme_bw()
+bp + scale_fill_manual(values=c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code># Scatter plot
+sp&lt;-ggplot(mtcars, aes(x=factor(wt), y=mpg, color=factor(cyl))) + geom_point(size=4)+theme_bw()
+sp + scale_color_manual(values=c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+</div>
+<div id="another-3-color-palette" class="section level2">
+<h2>another 3-color palette</h2>
+<pre class="r"><code># Box plot
+bp&lt;-ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose))) +
+  geom_boxplot()+theme_bw()
+bp + scale_fill_manual(values = c(&quot;#00AFBB&quot;, &quot;#E7B800&quot;, &quot;#FC4E07&quot;))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># Scatter plot
+sp&lt;-ggplot(mtcars, aes(x=factor(wt), y=mpg, color=factor(cyl))) + geom_point(size=4)+theme_bw()
+sp + scale_color_manual(values = c(&quot;#00AFBB&quot;, &quot;#E7B800&quot;, &quot;#FC4E07&quot;))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+</div>
+<div id="colorblind-friendly-palette" class="section level2">
+<h2>colorblind-friendly palette</h2>
+<pre class="r"><code>custom.col &lt;- c(&quot;#FFDB6D&quot;, &quot;#C4961A&quot;, &quot;#F4EDCA&quot;, 
+                &quot;#D16103&quot;, &quot;#C3D7A4&quot;, &quot;#52854C&quot;, &quot;#4E84C4&quot;, &quot;#293352&quot;)
+barplot(rep(1,length(custom.col)),col=custom.col)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code># The palette with grey:
+cbp1 &lt;- c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;,
+          &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+barplot(rep(1,length(cbp1)),col=cbp1)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code># The palette with black:
+cbp2 &lt;- c(&quot;#000000&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;,
+          &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+barplot(rep(1,length(cbp2)),col=cbp2)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+</div>
+<div id="ggplot2-default-color-palette" class="section level2">
+<h2>ggplot2 default color palette</h2>
+<p>refer to: <a href="https://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette" class="uri">https://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette</a></p>
+<pre class="r"><code>library(scales)
+hue_pal()(4)</code></pre>
+<pre><code>## [1] &quot;#F8766D&quot; &quot;#7CAE00&quot; &quot;#00BFC4&quot; &quot;#C77CFF&quot;</code></pre>
+<pre class="r"><code>#[1] &quot;#F8766D&quot; &quot;#7CAE00&quot; &quot;#00BFC4&quot; &quot;#C77CFF&quot;
+show_col(hue_pal()(4))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>show_col(hue_pal()(3))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+</div>
+<div id="rcolorbrewer-package" class="section level2">
+<h2>RColorBrewer package</h2>
+<p>refer to: <a href="https://rdrr.io/cran/RColorBrewer/man/ColorBrewer.html" class="uri">https://rdrr.io/cran/RColorBrewer/man/ColorBrewer.html</a></p>
+<pre class="r"><code>library(RColorBrewer)
+brewer.pal.info</code></pre>
+<pre><code>##          maxcolors category colorblind
+## BrBG            11      div       TRUE
+## PiYG            11      div       TRUE
+## PRGn            11      div       TRUE
+## PuOr            11      div       TRUE
+## RdBu            11      div       TRUE
+## RdGy            11      div      FALSE
+## RdYlBu          11      div       TRUE
+## RdYlGn          11      div      FALSE
+## Spectral        11      div      FALSE
+## Accent           8     qual      FALSE
+## Dark2            8     qual       TRUE
+## Paired          12     qual       TRUE
+## Pastel1          9     qual      FALSE
+## Pastel2          8     qual      FALSE
+## Set1             9     qual      FALSE
+## Set2             8     qual       TRUE
+## Set3            12     qual      FALSE
+## Blues            9      seq       TRUE
+## BuGn             9      seq       TRUE
+## BuPu             9      seq       TRUE
+## GnBu             9      seq       TRUE
+## Greens           9      seq       TRUE
+## Greys            9      seq       TRUE
+## Oranges          9      seq       TRUE
+## OrRd             9      seq       TRUE
+## PuBu             9      seq       TRUE
+## PuBuGn           9      seq       TRUE
+## PuRd             9      seq       TRUE
+## Purples          9      seq       TRUE
+## RdPu             9      seq       TRUE
+## Reds             9      seq       TRUE
+## YlGn             9      seq       TRUE
+## YlGnBu           9      seq       TRUE
+## YlOrBr           9      seq       TRUE
+## YlOrRd           9      seq       TRUE</code></pre>
+<pre class="r"><code>#par(mar=c(3,4,2,2))
+#display.brewer.all()
+(mycol=brewer.pal(10,&quot;Paired&quot;))</code></pre>
+<pre><code>##  [1] &quot;#A6CEE3&quot; &quot;#1F78B4&quot; &quot;#B2DF8A&quot; &quot;#33A02C&quot; &quot;#FB9A99&quot; &quot;#E31A1C&quot; &quot;#FDBF6F&quot;
+##  [8] &quot;#FF7F00&quot; &quot;#CAB2D6&quot; &quot;#6A3D9A&quot;</code></pre>
+<pre class="r"><code>barplot(rep(1,10),col=mycol)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>(mycol=brewer.pal(8,&quot;Dark2&quot;))</code></pre>
+<pre><code>## [1] &quot;#1B9E77&quot; &quot;#D95F02&quot; &quot;#7570B3&quot; &quot;#E7298A&quot; &quot;#66A61E&quot; &quot;#E6AB02&quot; &quot;#A6761D&quot;
+## [8] &quot;#666666&quot;</code></pre>
+<pre class="r"><code>barplot(rep(1,8),col=mycol)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+</div>
+</div>
+<div id="continuous-colors" class="section level1">
+<h1>Continuous colors</h1>
+<div id="scale_xxx_gradient" class="section level2">
+<h2>scale_xxx_gradient()</h2>
+<p>frequently used in heatmaps
+refer to: <a href="http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually#continuous-colors" class="uri">http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually#continuous-colors</a></p>
+<p>The graph can be colored according to the values of a continuous variable using the functions :</p>
+<ul>
+<li>scale_color_gradient(), scale_fill_gradient() for sequential gradients between two colors</li>
+<li>scale_color_gradient2(), scale_fill_gradient2() for diverging gradients</li>
+<li>scale_color_gradientn(), scale_fill_gradientn() for gradient between n colors</li>
+</ul>
+<pre class="r"><code># Color by qsec values
+sp&lt;-ggplot(mtcars, aes(x=wt, y=mpg, color=qsec)) + geom_point() +theme_bw()
+#sp
+summary(mtcars$qsec)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   14.50   16.89   17.71   17.85   18.90   22.90</code></pre>
+<pre class="r"><code>sp+scale_color_gradient2(low=&quot;blue&quot;, mid = &quot;white&quot;,high=&quot;red&quot;,
+        midpoint = quantile(mtcars$qsec,0.25))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="viridis-package" class="section level2">
+<h2>viridis package</h2>
+<p>useful refs:</p>
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html" class="uri">https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html</a></li>
+<li><a href="https://www.thinkingondata.com/something-about-viridis-library/" class="uri">https://www.thinkingondata.com/something-about-viridis-library/</a></li>
+<li><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="uri">https://sjmgarnier.github.io/viridisLite/reference/viridis.html</a></li>
+<li><a href="https://bookdown.org/hneth/ds4psy/D-4-apx-colors-pkgs.html" class="uri">https://bookdown.org/hneth/ds4psy/D-4-apx-colors-pkgs.html</a></li>
+</ul>
+<pre class="r"><code>library(viridis)
+ggplot(data.frame(x = rnorm(10000), y = rnorm(10000)), aes(x = x, y = y))+
+  geom_hex() + coord_fixed() +
+  scale_fill_viridis() + theme_bw()</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>It’s also easier to adjust continuous colors into discrete ones with the <code>viridis</code> package.</p>
+<pre class="r"><code>p &lt;- ggplot(mtcars, aes(wt, mpg))+
+    geom_point(size=4, aes(colour = factor(cyl))) +
+    theme_bw()
+p+scale_color_viridis(discrete=TRUE,option = &#39;viridis&#39;) </code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>p+scale_color_viridis(discrete=TRUE,option = &#39;magma&#39;) </code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<pre class="r"><code>p+scale_color_viridis(discrete=TRUE,option = &#39;turbo&#39;) </code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<pre class="r"><code>library(viridisLite)  # load package
+library(unikn) #seecol function
+vir_10 &lt;- viridis(n = 10)
+seecol(vir_10, col_brd = &quot;white&quot;, lwd_brd = 4, 
+       title = &quot;Example of a viridis color palette (n = 10)&quot;,
+       pal_names = paste0(&quot;viridis_&quot;, 1:10))</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+<div id="other-r-color-combos-that-are-colorblind-friendly" class="section level1">
+<h1>Other R color combos that are colorblind-friendly</h1>
+<div id="color-palette-1" class="section level2">
+<h2>8-color palette</h2>
+<pre class="r"><code>colorBlindBlack8  &lt;- c(&quot;#000000&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;, 
+                       &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+pie(rep(1, 8), col = colorBlindBlack8)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>colorBlindGrey8   &lt;- c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;, 
+                       &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+scales::show_col(colorBlindGrey8)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+</div>
+<div id="color-palette-2" class="section level2">
+<h2>12-color palette</h2>
+<pre class="r"><code>safe_colorblind_palette &lt;- c(&quot;#88CCEE&quot;, &quot;#CC6677&quot;, &quot;#DDCC77&quot;, &quot;#117733&quot;, &quot;#332288&quot;, &quot;#AA4499&quot;, 
+                             &quot;#44AA99&quot;, &quot;#999933&quot;, &quot;#882255&quot;, &quot;#661100&quot;, &quot;#6699CC&quot;, &quot;#888888&quot;)
+scales::show_col(safe_colorblind_palette)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="rcolorbrewer-display.brewer.allcolorblindfriendly-t" class="section level2">
+<h2>RColorBrewer: display.brewer.all(colorblindFriendly = T)</h2>
+<p>refer to: <a href="https://riptutorial.com/r/example/28354/colorblind-friendly-palettes">colorblind-friendly-palettes</a></p>
+<pre class="r"><code>library(RColorBrewer)
+display.brewer.all(colorblindFriendly = T)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>#palette using grey
+cbPalette &lt;- c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;, &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+scales::show_col(cbPalette)
+#palette using black
+cbbPalette &lt;- c(&quot;#000000&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;, &quot;#009E73&quot;, &quot;#F0E442&quot;, &quot;#0072B2&quot;, &quot;#D55E00&quot;, &quot;#CC79A7&quot;)
+scales::show_col(cbPalette)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+</div>
+</div>
+<div id="miscellaneous" class="section level1">
+<h1>Miscellaneous</h1>
+<div id="make-transparent-colors-in-r" class="section level2">
+<h2>make transparent colors in R</h2>
+<p>refer to: <a href="https://www.dataanalytics.org.uk/make-transparent-colors-in-r/#:~:text=Make%20transparent%20colors%20in%20R&amp;text=The%20rgb()%20command%20is,255%20being%20%E2%80%9Csolid%E2%80%9D">Make transparent colors in R</a></p>
+<pre class="r"><code>## Transparent colors
+## Mark Gardener 2015
+## www.dataanalytics.org.uk
+
+t_col &lt;- function(color, percent = 50, name = NULL) {
+  #      color = color name
+  #      percent = % transparency
+  #      name = an optional name for the color
+  
+  ## Get RGB values for named color
+  #rgb.val &lt;- col2rgb(color)
+  
+  rgb.val=col2rgb(color)
+  
+  ## Make new color using input color as base and alpha set by transparency
+  t.col &lt;- rgb(rgb.val[1], rgb.val[2], rgb.val[3],
+               max = 255,
+               alpha = (100 - percent) * 255 / 100,
+               names = name)
+  
+  ## Save the color
+  #invisible(t.col)
+  t.col
+}
+my.cols=c(&#39;black&#39;,&#39;orange&#39;,&#39;sky blue&#39;,&#39;yellow&#39;,&#39;blue&#39;);
+my.cols</code></pre>
+<pre><code>## [1] &quot;black&quot;    &quot;orange&quot;   &quot;sky blue&quot; &quot;yellow&quot;   &quot;blue&quot;</code></pre>
+<pre class="r"><code>my.cols2=sapply(my.cols,function(i){t_col(i,percent=80)})
+my.cols2</code></pre>
+<pre><code>##       black      orange    sky blue      yellow        blue 
+## &quot;#00000033&quot; &quot;#FFA50033&quot; &quot;#87CEEB33&quot; &quot;#FFFF0033&quot; &quot;#0000FF33&quot;</code></pre>
+<pre class="r"><code>par(mfrow=c(2,1))
+barplot(1:length(my.cols),col=my.cols)
+barplot(1:length(my.cols),col=my.cols2)</code></pre>
+<p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+</div>
+<div id="useful-resources" class="section level1">
+<h1>Useful resources</h1>
+<ol style="list-style-type: decimal">
+<li><a href="http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually">sthda: how to change colors automatically and manually</a></li>
+<li><a href="https://www.datanovia.com/en/blog/ggplot-colors-best-tricks-you-will-love/">GGPlot Colors Best Tricks You Will Love by Alboukadel</a></li>
+<li><a href="https://stackoverflow.com/questions/57153428/r-plot-color-combinations-that-are-colorblind-accessible">stackoverflow: r-plot-color-combinations-that-are-colorblind-accessible</a></li>
+<li><a href="https://mikemol.github.io/technique/colorblind/2018/02/11/color-safe-palette.html">color-safe-palett</a></li>
+<li><a href="http://jfly.iam.u-tokyo.ac.jp/color/#pallet">tokyo.ac.jp</a></li>
+</ol>
+<pre class="r"><code>#installed.packages()[names(sessionInfo()$otherPkgs), &quot;Version&quot;]
+sessionInfo()</code></pre>
+<pre><code>## R version 4.1.3 (2022-03-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur/Monterey 10.16
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] unikn_0.5.0        viridis_0.6.2      viridisLite_0.4.0  RColorBrewer_1.1-2
+## [5] scales_1.2.1       ggplot2_3.4.0     
+## 
+## loaded via a namespace (and not attached):
+##  [1] tidyselect_1.1.1 xfun_0.39        bslib_0.3.1      purrr_0.3.4     
+##  [5] lattice_0.20-45  colorspace_2.0-2 vctrs_0.5.1      generics_0.1.2  
+##  [9] htmltools_0.5.2  yaml_2.3.4       utf8_1.2.2       rlang_1.0.6     
+## [13] hexbin_1.28.2    jquerylib_0.1.4  pillar_1.7.0     glue_1.6.1      
+## [17] withr_2.5.0      DBI_1.1.2        lifecycle_1.0.3  stringr_1.4.0   
+## [21] munsell_0.5.0    blogdown_1.17.2  gtable_0.3.0     evaluate_0.15   
+## [25] labeling_0.4.2   knitr_1.37       fastmap_1.1.0    fansi_1.0.2     
+## [29] highr_0.9        jsonlite_1.8.0   farver_2.1.0     gridExtra_2.3   
+## [33] digest_0.6.29    stringi_1.7.8    bookdown_0.25    dplyr_1.0.8     
+## [37] grid_4.1.3       cli_3.5.0        tools_4.1.3      magrittr_2.0.2  
+## [41] sass_0.4.0       tibble_3.1.6     crayon_1.5.0     pkgconfig_2.0.3 
+## [45] ellipsis_0.3.2   assertthat_0.2.1 rmarkdown_2.13   rstudioapi_0.13 
+## [49] R6_2.5.1         compiler_4.1.3</code></pre>
+</div>

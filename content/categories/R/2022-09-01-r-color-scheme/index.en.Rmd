@@ -1,0 +1,264 @@
+---
+title: R color scheme
+author: Ming
+date: '2022-09-01'
+slug: []
+categories:
+  - R
+tags:
+  - data visualization
+  - ggplot
+subtitle: ''
+lastmod: '2023-05-26T18:31:23-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=F,warning = F,cache=F)
+library(ggplot2)
+```
+
+# Discrete colors
+
+## 3-color palette
+
+```{r fig.height=3}
+# Box plot
+bp<-ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose))) +
+  geom_boxplot()+theme_bw()
+bp + scale_fill_manual(values=c("#999999", "#E69F00", "#56B4E9"))
+
+# Scatter plot
+sp<-ggplot(mtcars, aes(x=factor(wt), y=mpg, color=factor(cyl))) + geom_point(size=4)+theme_bw()
+sp + scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
+```
+
+## another 3-color palette
+
+```{r fig.height=3}
+# Box plot
+bp<-ggplot(ToothGrowth, aes(x=factor(dose), y=len, fill=factor(dose))) +
+  geom_boxplot()+theme_bw()
+bp + scale_fill_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))
+
+# Scatter plot
+sp<-ggplot(mtcars, aes(x=factor(wt), y=mpg, color=factor(cyl))) + geom_point(size=4)+theme_bw()
+sp + scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))
+
+```
+
+## colorblind-friendly palette
+
+```{r fig.height=3}
+custom.col <- c("#FFDB6D", "#C4961A", "#F4EDCA", 
+                "#D16103", "#C3D7A4", "#52854C", "#4E84C4", "#293352")
+barplot(rep(1,length(custom.col)),col=custom.col)
+
+# The palette with grey:
+cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73",
+          "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+barplot(rep(1,length(cbp1)),col=cbp1)
+# The palette with black:
+cbp2 <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
+          "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+barplot(rep(1,length(cbp2)),col=cbp2)
+```
+
+## ggplot2 default color palette
+refer to: https://stackoverflow.com/questions/8197559/emulate-ggplot2-default-color-palette
+```{r fig.height=3}
+library(scales)
+hue_pal()(4)
+#[1] "#F8766D" "#7CAE00" "#00BFC4" "#C77CFF"
+show_col(hue_pal()(4))
+show_col(hue_pal()(3))
+```
+
+## RColorBrewer package
+refer to: https://rdrr.io/cran/RColorBrewer/man/ColorBrewer.html
+
+```{r fig.height=3}
+library(RColorBrewer)
+brewer.pal.info
+#par(mar=c(3,4,2,2))
+#display.brewer.all()
+(mycol=brewer.pal(10,"Paired"))
+barplot(rep(1,10),col=mycol)
+(mycol=brewer.pal(8,"Dark2"))
+barplot(rep(1,8),col=mycol)
+```
+
+# Continuous colors
+
+## scale_xxx_gradient()
+frequently used in heatmaps
+refer to: http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually#continuous-colors
+
+The graph can be colored according to the values of a continuous variable using the functions :
+
+- scale_color_gradient(), scale_fill_gradient() for sequential gradients between two colors
+- scale_color_gradient2(), scale_fill_gradient2() for diverging gradients
+- scale_color_gradientn(), scale_fill_gradientn() for gradient between n colors
+
+
+```{r fig.height=3}
+# Color by qsec values
+sp<-ggplot(mtcars, aes(x=wt, y=mpg, color=qsec)) + geom_point() +theme_bw()
+#sp
+summary(mtcars$qsec)
+sp+scale_color_gradient2(low="blue", mid = "white",high="red",
+        midpoint = quantile(mtcars$qsec,0.25))
+```
+
+## viridis package
+useful refs: 
+
+- https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html
+- https://www.thinkingondata.com/something-about-viridis-library/
+- https://sjmgarnier.github.io/viridisLite/reference/viridis.html
+- https://bookdown.org/hneth/ds4psy/D-4-apx-colors-pkgs.html
+
+```{r fig.height=3}
+library(viridis)
+ggplot(data.frame(x = rnorm(10000), y = rnorm(10000)), aes(x = x, y = y))+
+  geom_hex() + coord_fixed() +
+  scale_fill_viridis() + theme_bw()
+```
+
+It's also easier to adjust continuous colors into discrete ones with the `viridis` package.
+
+```{r fig.height=3}
+p <- ggplot(mtcars, aes(wt, mpg))+
+    geom_point(size=4, aes(colour = factor(cyl))) +
+    theme_bw()
+p+scale_color_viridis(discrete=TRUE,option = 'viridis') 
+p+scale_color_viridis(discrete=TRUE,option = 'magma') 
+p+scale_color_viridis(discrete=TRUE,option = 'turbo') 
+```
+
+```{r}
+library(viridisLite)  # load package
+library(unikn) #seecol function
+vir_10 <- viridis(n = 10)
+seecol(vir_10, col_brd = "white", lwd_brd = 4, 
+       title = "Example of a viridis color palette (n = 10)",
+       pal_names = paste0("viridis_", 1:10))
+```
+
+# Other R color combos that are colorblind-friendly
+
+## 8-color palette
+```{r}
+colorBlindBlack8  <- c("#000000", "#E69F00", "#56B4E9", "#009E73", 
+                       "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+pie(rep(1, 8), col = colorBlindBlack8)
+
+colorBlindGrey8   <- c("#999999", "#E69F00", "#56B4E9", "#009E73", 
+                       "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+scales::show_col(colorBlindGrey8)
+```
+
+## 12-color palette
+```{r}
+safe_colorblind_palette <- c("#88CCEE", "#CC6677", "#DDCC77", "#117733", "#332288", "#AA4499", 
+                             "#44AA99", "#999933", "#882255", "#661100", "#6699CC", "#888888")
+scales::show_col(safe_colorblind_palette)
+```
+
+## RColorBrewer: display.brewer.all(colorblindFriendly = T)
+refer to: [colorblind-friendly-palettes](https://riptutorial.com/r/example/28354/colorblind-friendly-palettes)
+```{r fig.height=8}
+library(RColorBrewer)
+display.brewer.all(colorblindFriendly = T)
+#palette using grey
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+scales::show_col(cbPalette)
+#palette using black
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+scales::show_col(cbPalette)
+```
+
+# Miscellaneous
+## make transparent colors in R
+refer to: [Make transparent colors in R](https://www.dataanalytics.org.uk/make-transparent-colors-in-r/#:~:text=Make%20transparent%20colors%20in%20R&text=The%20rgb()%20command%20is,255%20being%20%E2%80%9Csolid%E2%80%9D)
+
+```{r}
+## Transparent colors
+## Mark Gardener 2015
+## www.dataanalytics.org.uk
+
+t_col <- function(color, percent = 50, name = NULL) {
+  #      color = color name
+  #      percent = % transparency
+  #      name = an optional name for the color
+  
+  ## Get RGB values for named color
+  #rgb.val <- col2rgb(color)
+  
+  rgb.val=col2rgb(color)
+  
+  ## Make new color using input color as base and alpha set by transparency
+  t.col <- rgb(rgb.val[1], rgb.val[2], rgb.val[3],
+               max = 255,
+               alpha = (100 - percent) * 255 / 100,
+               names = name)
+  
+  ## Save the color
+  #invisible(t.col)
+  t.col
+}
+my.cols=c('black','orange','sky blue','yellow','blue');
+my.cols
+my.cols2=sapply(my.cols,function(i){t_col(i,percent=80)})
+my.cols2
+par(mfrow=c(2,1))
+barplot(1:length(my.cols),col=my.cols)
+barplot(1:length(my.cols),col=my.cols2)
+```
+
+# Useful resources
+
+1. [sthda: how to change colors automatically and manually](http://www.sthda.com/english/wiki/ggplot2-colors-how-to-change-colors-automatically-and-manually)
+2. [GGPlot Colors Best Tricks You Will Love by Alboukadel](https://www.datanovia.com/en/blog/ggplot-colors-best-tricks-you-will-love/)
+3. [stackoverflow: r-plot-color-combinations-that-are-colorblind-accessible](https://stackoverflow.com/questions/57153428/r-plot-color-combinations-that-are-colorblind-accessible)
+4. [color-safe-palett](https://mikemol.github.io/technique/colorblind/2018/02/11/color-safe-palette.html)
+5. [tokyo.ac.jp](http://jfly.iam.u-tokyo.ac.jp/color/#pallet)
+
+```{r}
+#installed.packages()[names(sessionInfo()$otherPkgs), "Version"]
+sessionInfo()
+```
+
+

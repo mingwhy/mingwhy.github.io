@@ -4,7 +4,6 @@ author: Ming
 date: '2022-05-02'
 slug: []
 categories:
-  - R
   - statistics
 tags:
   - linear mixed model

@@ -1,11 +1,10 @@
 ---
-title: 'Linear modeling: Visulaze & Interpret the Interaction'
+title: 'Linear Regression: Visulaze & Interpret the Interaction'
 author: Ming
 date: '2022-04-05'
 slug: []
 categories:
   - statistics
-  - R
 tags:
   - statistics
   - linear regression

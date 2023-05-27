@@ -5,7 +5,6 @@ date: '2022-04-06'
 slug: []
 categories:
   - statistics
-  - R
 tags:
   - linear regression
   - statistics
