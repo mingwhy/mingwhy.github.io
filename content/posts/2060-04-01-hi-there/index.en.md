@@ -1,5 +1,5 @@
 ---
-title: Hi, there
+title: A Trivial Travelogue
 author: Ming
 date: '2022-04-01'
 slug: []
@@ -42,7 +42,6 @@ seo:
   images: []
 ---
 
-I could be bounded in a nutshell and count myself a king of infinite space.
 
 Do not go gentle into that good night
 ======
@@ -91,7 +90,10 @@ Rage, rage against the dying of the light.
 
 ------
 
-Ideas that you must understand to break free from the Matrix:
+I could be bounded in a nutshell and count myself a king of infinite space.*
+
+
+**Ideas that you must understand to break free from the Matrix:**
 - The news is mostly fake
 - Your memory sucks
 - You’re your worst enemy and best ally
@@ -100,5 +102,5 @@ Ideas that you must understand to break free from the Matrix:
 - Perception creates your reality
 - Mindset is everything
 
+------
 
-<!--more-->
