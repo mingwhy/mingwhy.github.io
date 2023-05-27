@@ -4,7 +4,6 @@ author: Ming
 date: '2022-04-03'
 slug: []
 categories:
-  - R
   - statistics
 tags:
   - linear regression

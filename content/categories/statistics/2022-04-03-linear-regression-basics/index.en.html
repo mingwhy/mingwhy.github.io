@@ -4,7 +4,6 @@ author: Ming
 date: '2022-04-03'
 slug: []
 categories:
-  - R
   - statistics
 tags:
   - linear regression
@@ -46,7 +45,6 @@ seo:
   images: []
 ---
 
-<script src="{{< blogdown/postref >}}index.en_files/header-attrs/header-attrs.js"></script>
 
 <div id="TOC">
 
@@ -111,7 +109,7 @@ fit1</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 4.947 on 27 degrees of freedom
-## Multiple R-squared:  0.5326, Adjusted R-squared:  0.4807 
+## Multiple R-squared:  0.5326,	Adjusted R-squared:  0.4807 
 ## F-statistic: 10.26 on 3 and 27 DF,  p-value: 0.0001111</code></pre>
 <p>Two things about the summary() output:</p>
 <ul>
@@ -183,7 +181,7 @@ summary(fit2)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 3.116 on 94 degrees of freedom
-## Multiple R-squared:  0.6579, Adjusted R-squared:  0.6397 
+## Multiple R-squared:  0.6579,	Adjusted R-squared:  0.6397 
 ## F-statistic: 36.16 on 5 and 94 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Similarly, there is individual t-statistics for each estimated coefficient and a F-statisticfor the overall model at the end of the summary output.</p>
 <p>The significance tests for each coefficient are performed relative to the base level.</p>
@@ -418,7 +416,7 @@ summary(fit7)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 0.2252 on 58 degrees of freedom
-## Multiple R-squared:  0.839,  Adjusted R-squared:  0.8279 
+## Multiple R-squared:  0.839,	Adjusted R-squared:  0.8279 
 ## F-statistic: 75.54 on 4 and 58 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The summary of this fit shows that PIPO differs markedly from the base level species, in this case PIMO. However, PSME does not differ from PIMO. The linear effects in log diameter and log height remain significant.</p>
 <p>An ANOVA table will tell us whether adding species improves the model overall (as a reminder, you need the car package loaded for this function).</p>
@@ -462,7 +460,7 @@ summary(fit8)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 0.2155 on 54 degrees of freedom
-## Multiple R-squared:  0.8626, Adjusted R-squared:  0.8423 
+## Multiple R-squared:  0.8626,	Adjusted R-squared:  0.8423 
 ## F-statistic: 42.39 on 8 and 54 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>x&lt;-model.matrix(fit8)
 head(x)</code></pre>
@@ -550,7 +548,7 @@ summary(lmfit)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 3.219 on 80 degrees of freedom
-## Multiple R-squared:  0.5446, Adjusted R-squared:  0.5276 
+## Multiple R-squared:  0.5446,	Adjusted R-squared:  0.5276 
 ## F-statistic:  31.9 on 3 and 80 DF,  p-value: 1.158e-13</code></pre>
 <pre class="r"><code>x&lt;-model.matrix(lmfit)
 head(x)</code></pre>
@@ -670,7 +668,7 @@ summary(lmfit2)</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## Residual standard error: 3.219 on 80 degrees of freedom
-## Multiple R-squared:  0.5446, Adjusted R-squared:  0.5276 
+## Multiple R-squared:  0.5446,	Adjusted R-squared:  0.5276 
 ## F-statistic:  31.9 on 3 and 80 DF,  p-value: 1.158e-13</code></pre>
 </div>
 <div id="using-the-effects-package" class="section level3">
