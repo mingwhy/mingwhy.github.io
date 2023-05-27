@@ -471,19 +471,19 @@ languages:
           title: ''
           typeit: yes
         rss: 10
-      search:
-        absoluteURL: no
-        algolia:
-          appID: PASDMWALPK
-          index: index.en
-          searchKey: b42948e51daaa93df92381c8e2ac0f93
-        contentLength: 4000
-        enable: yes
-        highlightTag: em
-        maxResultLength: 10
-        placeholder: ''
-        snippetLength: 30
-        type: algolia
+      #search:
+      #  absoluteURL: no
+      #  algolia:
+      #    appID: PASDMWALPK
+      #    index: index.en
+      #    searchKey: b42948e51daaa93df92381c8e2ac0f93
+      #  contentLength: 4000
+      #  enable: yes
+      #  highlightTag: em
+      #  maxResultLength: 10
+      #  placeholder: ''
+      #  snippetLength: 30
+      #  type: algolia
       social:
         Email: yangming.sysu@gmail.com
         #Facebook: xxxx
@@ -559,19 +559,19 @@ languages:
           title: ''
           typeit: yes
         rss: 10
-      search:
-        absoluteURL: no
-        algolia:
-          appID: PASDMWALPK
-          index: index.zh-cn
-          searchKey: b42948e51daaa93df92381c8e2ac0f93
-        contentLength: 4000
-        enable: yes
-        highlightTag: em
-        maxResultLength: 10
-        placeholder: ''
-        snippetLength: 50
-        type: algolia
+      #search:
+      #  absoluteURL: no
+      #  algolia:
+      #    appID: PASDMWALPK
+      #    index: index.zh-cn
+      #    searchKey: b42948e51daaa93df92381c8e2ac0f93
+      #  contentLength: 4000
+      #  enable: yes
+      #  highlightTag: em
+      #  maxResultLength: 10
+      #  placeholder: ''
+      #  snippetLength: 50
+      #  type: algolia
       social:
         #Bilibili: xxxx
         #Devto: xxxx
