@@ -43,12 +43,11 @@ seo:
 ---
 
 
-Do not go gentle into that good night
-======
+# Do not go gentle into that good night
 
 
-Dylan Thomas
-======
+# Dylan Thomas
+
 
 Do not go gentle into that good night,
 
@@ -90,7 +89,7 @@ Rage, rage against the dying of the light.
 
 ------
 
-I could be bounded in a nutshell and count myself a king of infinite space.*
+*I could be bounded in a nutshell and count myself a king of infinite space.*
 
 
 **Ideas that you must understand to break free from the Matrix:**
