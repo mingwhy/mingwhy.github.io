@@ -1,0 +1,107 @@
+---
+title: Cost of large numbers of hypothesis tests
+author: Ming
+date: '2022-08-26'
+slug: []
+categories: []
+tags: []
+subtitle: ''
+lastmod: '2023-10-14T18:16:54-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+<div id="TOC">
+
+</div>
+
+<div id="hypothesis-testing" class="section level1">
+<h1>Hypothesis Testing</h1>
+<ol style="list-style-type: decimal">
+<li>Define a null hypothesis, often “No Difference”</li>
+<li>Define your alpha level, or what would be considered evidence that the observed phenomenon was inconsistent with the null hypothesis</li>
+<li>Obtain data and conduct the analysis</li>
+</ol>
+<p><img src="type1-2-error.png" alt="Type I and II Errors, https://www.colorado.edu/ibg/sites/default/files/attached-files/boulder_power_2022.pdf" />
+<img src="hypo-test.png" alt="Power and sample size, Figure source:https://www.nature.com/articles/nmeth.2738" /></p>
+</div>
+<div id="statistical-power" class="section level1">
+<h1>Statistical Power</h1>
+<p>The probability of correctly rejecting the Null Hypothesis, which depends on</p>
+<ul>
+<li>sample size</li>
+<li>effect size</li>
+<li>the alpha level</li>
+<li>the beta level</li>
+</ul>
+</div>
+<div id="cost-of-large-numbers-of-hypothesis-tests" class="section level1">
+<h1>Cost of large numbers of hypothesis tests</h1>
+<p>why multiple testing inevitably leads to some loss of power or the need for a compensatory increase in the detectable effect size and/or sample size?</p>
+<div id="single-test" class="section level2">
+<h2>single test</h2>
+<p>Consider a hypothesis test based on a statistic B, such that the standardized z-statistic, <span class="math inline">\(Z = (B-b)/(s/\sqrt(N))\)</span>, where b is the expected value of B and is its standard error in a sample of size N.</p>
+<p>if we want to test whether is expected value <span class="math inline">\(b = 0\)</span>.
+Set <span class="math inline">\(\alpha = 0.05\)</span>, the critical value <span class="math inline">\(C = 1.96\)</span>, we would rejected the null hypothesis if B is more than 1.96 standard errors from 0.</p>
+<p>Set effect size <span class="math inline">\(b = 2.8\)</span>, which means in the alternative hypothesis, statistic B follows <span class="math inline">\(N(b,s/\sqrt(N))\)</span>, then we got 80% power (area under the bold curve on the rightside in Figure 1a).</p>
+</div>
+<div id="two-tests" class="section level2">
+<h2>two tests</h2>
+<p>When performing this test twice, or H=2, and we choose a conservative approach, Bonferroni adjustment, to correct for multiple testing.</p>
+<p>This approach sets the per-test significance level to <span class="math inline">\(\alpha/H\)</span>, which guarantees for an experiment comprised of H tests, the probability of one or more false positives (known as the family-wise error rate) is no more than <span class="math inline">\(\alpha\)</span>.
+For <span class="math inline">\(\alpha = 0.05, H=2\)</span>, the Bonferroni critical value C is 2.24. This led to a power at 71% (area under the bold curve on the rightside in Figure 1b).</p>
+<p>Thus, the cost of going from a single test with 80% power to two Bonferroni-adjusted tests is always a reduction of power to 71% if the initial effect size and sample size are maintained.</p>
+</div>
+<div id="larger-effect-size-or-increase-sample-size" class="section level2">
+<h2>larger effect size or increase sample size</h2>
+<p>How to maintain the the original level of power?
+Either we have a larger detectable effect size (Figure 1c), or increase the sample size.
+A larger detectable effect size means the statistic’s distribution under the alternative hypothesis shifted to the rightside.
+Increasing sample size would narrow the widths of both the null and alternative curves accordingly (Figure 1d).</p>
+<div class="figure">
+<img src="cost-of-multiple-test.png" alt="" />
+<p class="caption">Figure 1, power analysis, figure source: <a href="https://www.nature.com/articles/mp2010117#citeas" class="uri">https://www.nature.com/articles/mp2010117#citeas</a></p>
+</div>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><a href="https://www.colorado.edu/ibg/sites/default/files/attached-files/boulder_power_2022.pdf">Hypothesis Testing, Effect Sizes and Statistical Power</a> by Brad Verhulst from Texas A&amp;M University</li>
+<li>Krzywinski, M., Altman, N. Power and sample size. Nat Methods 10, 1139–1140 (2013). <a href="https://doi.org/10.1038/nmeth.2738" class="uri">https://doi.org/10.1038/nmeth.2738</a>
+3,</li>
+<li>Lazzeroni, L., Ray, A. The cost of large numbers of hypothesis tests on power, effect size and sample size. Mol Psychiatry 17, 108–114 (2012). <a href="https://doi.org/10.1038/mp.2010.117" class="uri">https://doi.org/10.1038/mp.2010.117</a></li>
+</ul>
+</div>
+</div>
+</div>
