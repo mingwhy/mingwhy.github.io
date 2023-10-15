@@ -1,0 +1,113 @@
+---
+title: Linear mixed model - heritability
+author: Ming
+date: '2022-05-04'
+slug: []
+categories:
+  - statistics
+tags:
+  - linear mixed model
+  - genetics
+subtitle: ''
+lastmod: '2023-10-14T20:23:18-07:00'
+authorLink: ''
+description: ''
+license: ''
+images: []
+featuredImage: ''
+featuredImagePreview: ''
+hiddenFromHomePage: no
+hiddenFromSearch: no
+twemoji: no
+lightgallery: yes
+ruby: yes
+fraction: yes
+fontawesome: yes
+linkToMarkdown: yes
+rssFullText: no
+toc:
+  enable: yes
+  auto: yes
+code:
+  copy: yes
+  maxShownLines: 50
+math:
+  enable: no
+mapbox: ~
+share:
+  enable: yes
+comment:
+  enable: yes
+library:
+  css: ~
+  js: ~
+seo:
+  images: []
+---
+
+
+<div id="TOC">
+
+</div>
+
+<div id="heritable-and-heritability" class="section level1">
+<h1>heritable and heritability</h1>
+<ul>
+<li>The term “heritable” applies to traits that vary in the population and are more similar in parents and offspring than they are in randomly selected individuals in the population.</li>
+<li>The concept of “heritability” was introduced “to quantify the level of predictability of passage of a biologically interesting phenotype from parent to offspring” (Feldman, 151).</li>
+</ul>
+</div>
+<div id="heritability-and-population-genetics" class="section level1">
+<h1>heritability and population genetics</h1>
+<p><span class="math inline">\(V_{p} = V_{G} + V_{E} = V_{A} +V_{D} + V_{E}\)</span></p>
+<ul>
+<li>broad sense heritability, h2b, “the proportion of phenotypic differences due to all sources of genetic variance” (Plomin 1990, 234).</li>
+<li>Narrow sense heritability, h2, “the proportion of phenotypic variance due solely to additive genetic variance” (Plomin 1990, 234).</li>
+</ul>
+<p><span class="math inline">\(h_{b}^2 = V_{G}/V_{P}\)</span></p>
+<p><span class="math inline">\(h^2 = V_{A}/V_{P}\)</span></p>
+</div>
+<div id="measuring-heritability-from-galton-to-gwas" class="section level1">
+<h1>measuring heritability: from galton to GWAS</h1>
+<div id="conventional-methods-dont-rely-on-genetic-data-genetic-sequence-snps-etc" class="section level2">
+<h2>conventional methods don’t rely on genetic data (genetic sequence, snps, etc)</h2>
+<p>A quantitative framework of family stuides, for example,
+<span class="math inline">\(h^2=Vg/Vp ~ covariance(offspring, one parent)\)</span></p>
+<p>More details from <a href="https://jyanglab.com/agro931/">Heritability estimation</a> from J.Yang Lab.</p>
+</div>
+<div id="genetic-data-combined-with-phenotype-or-endophenotype-data" class="section level2">
+<h2>genetic data combined with phenotype or endophenotype data</h2>
+<p>linear mixed model (LMM) framework</p>
+<p>y = Xb + Zu + e</p>
+<p>X: fixed effect</p>
+<p>Z: random effect</p>
+<p>u ~ N(0, sigma1)</p>
+<p>e ~ N(0, sigma2)</p>
+<p>y: phenotype vector</p>
+<p>Z: n x p matrix</p>
+<p>n: number of samples</p>
+<p>p: number of SNPs</p>
+<p>element in Z: 0 ,1, 2 &lt;=&gt; aa, Aa, AA</p>
+<p>Apply LMM to estimate sigma1 and sigma2</p>
+<p>h2 = p*sigma1 / (p*sigma1+sigma2)</p>
+<p>if using CpG (or metabolite or gene expression) as endo-phenotype, per CpG site heritability can be estimated.</p>
+<p>For example:
+<img src="h2.png" alt="heritability, figure source: https://academic.oup.com/hmg/article/25/12/2600/2581433" /></p>
+<p>In one of my projects, I applied linear mixed model to estimate heritability in fruit fly (Using Drosophila to identify naturally occurring genetic modifiers of Aβ42- and tau-induced toxicity, PMID: 37311212, <a href="https://github.com/mingwhy/AD_fly_eye" class="uri">https://github.com/mingwhy/AD_fly_eye</a>), 02_AD_fly_eye, <code>Caluclate best linear unbiased predictor (BLUP) and broadsense heritability (H2B)</code>.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><a href="https://jyanglab.com/agro932/">AGRO-932 Biometrical genetics and plant breeding</a></li>
+<li><a href="https://jyanglab.com/agro931/">AGRO/ANSCI 931 Population Genetics</a></li>
+<li><a href="https://plato.stanford.edu/entries/heredity/">Stanford Encyclopedia of Philosophy</a></li>
+<li><a href="https://rpubs.com/jrut/853850">Estimation of variance components and heritability</a></li>
+<li><a href="https://cosx.org/2014/04/lmm-and-me/">昔时因，今日意</a> by 杨灿</li>
+<li>Yang, Jian, et al. “Common SNPs explain a large proportion of the heritability for human height.” Nature genetics 42.7 (2010): 565-569.</li>
+<li>Shah, Sonia, et al. “Genetic and environmental exposures constrain epigenetic drift over the human life course.” Genome research 24.11 (2014): 1725-1733.</li>
+<li>Rowlatt, Amy, et al. “The heritability and patterns of DNA methylation in normal human colorectum.” Human molecular genetics 25.12 (2016): 2600-2611.</li>
+<li>Rohde, Palle Duun, Izel Fourie Sørensen, and Peter Sørensen. “qgg: an R package for large-scale quantitative genetic analyses.” Bioinformatics 36.8 (2020): 2614-2615.</li>
+<li>Zhu, Huanhuan, and Xiang Zhou. “Statistical methods for SNP heritability estimation and partition: A review.” Computational and Structural Biotechnology Journal 18 (2020): 1557-1568.</li>
+</ul>
+</div>
+</div>
