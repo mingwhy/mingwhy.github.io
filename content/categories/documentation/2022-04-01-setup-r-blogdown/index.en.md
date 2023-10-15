@@ -75,10 +75,14 @@ Restart R, in the blog folder, use `serve site` in the `Addins` to generate the 
 - I used `.Rmd` instead of `.Rmarkdown`. `.Rmd` leads to `.html` file and `.Rmarkdown` to `.markdown` file when `serve site`. Both viewed fine on my laptop, but only `html` show all R plots when deployed on netlify.
 - With all `Rmd` files ready, run `serve site` locally to make sure all `.html` files are generated and properly configured, then sync to github.
 - Feel free to delete `themes/LoveIt/exampleSite/` folder.
-- On the `Categories` page, if you didn't see blogs organized into different categories, double check if you have included 'tags' at the very beginning of each Rmd file, for example:
+- On the `Categories` page, if you didn't see blogs organized into different categories, double check if you have included `categories` or `tags` at the very beginning of each Rmd file, for example:
+  >categories: 
+  > - statistics
   >tags: 
   > - power analysis
   > - statistics
+- if you make any changes in `.Rmd` file, delete the original  `.html` file, and use `serve site` to re-generate the `.html` file.
+
 
 Useful tutorial:
 

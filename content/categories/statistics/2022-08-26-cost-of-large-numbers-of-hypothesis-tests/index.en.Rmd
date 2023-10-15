@@ -3,12 +3,13 @@ title: Cost of large numbers of hypothesis tests
 author: Ming
 date: '2022-08-26'
 slug: []
-categories: []
-tags: 
+categories:
+  - statistics
+tags:
   - power analysis
   - statistics
 subtitle: ''
-lastmod: '2023-10-14T18:16:54-07:00'
+lastmod: '2023-10-14T19:14:23-07:00'
 authorLink: ''
 description: ''
 license: ''
@@ -43,6 +44,8 @@ library:
 seo:
   images: []
 ---
+
+
 
 # Hypothesis Testing 
 1. Define a null hypothesis, often “No Difference”
@@ -92,4 +95,5 @@ Increasing sample size would narrow the widths of both the null and alternative 
 - Krzywinski, M., Altman, N. Power and sample size. Nat Methods 10, 1139–1140 (2013). https://doi.org/10.1038/nmeth.2738
 3, 
 - Lazzeroni, L., Ray, A. The cost of large numbers of hypothesis tests on power, effect size and sample size. Mol Psychiatry 17, 108–114 (2012). https://doi.org/10.1038/mp.2010.117
+
 

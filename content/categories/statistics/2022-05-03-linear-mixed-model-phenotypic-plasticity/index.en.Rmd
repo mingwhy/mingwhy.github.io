@@ -3,7 +3,8 @@ title: Linear Mixed Model - phenotypic plasticity
 author: Ming
 date: '2022-05-03'
 slug: []
-categories: []
+categories: 
+  - statistics
 tags:
   - linear mixed model
   - statistics
