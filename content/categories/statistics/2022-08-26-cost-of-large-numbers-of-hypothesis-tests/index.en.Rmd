@@ -4,7 +4,9 @@ author: Ming
 date: '2022-08-26'
 slug: []
 categories: []
-tags: []
+tags: 
+  - power analysis
+  - statistics
 subtitle: ''
 lastmod: '2023-10-14T18:16:54-07:00'
 authorLink: ''
