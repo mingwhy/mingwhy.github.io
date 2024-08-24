@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>A Trivial Travelogue | Do not go gentle into that good night.</title>
+
+  
+  <meta name="author" content="Akira">
+  
+
+  
+  <meta name="description" content="Do not go gentle into that good night.">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="A Trivial Travelogue"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="A Trivial Travelogue" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  
+  <link href="https://fonts.lug.ustc.edu.cn/css?family=Lato|Rubik" rel="stylesheet">
+  <script src="/js/pangu-407.min.js"></script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    pangu.autoSpacingPage();
+  });
+</script>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">A Trivial Travelogue</a>
+    </h1>
+    <p class="site-description">Do not go gentle into that good night.</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/categories">Categories</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+        <li><a href="/atom.xml">RSS</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2022/08/01/set-up-blog/"><span>Hexo+GitHub Pages搭建个人博客网站教程 on Mac OS</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/08/01/set-up-blog/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-08-01T08:00:00.000Z">
+          2022-08-01
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+
+        <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>参考 <a target="_blank" rel="noopener" href="https://blog.l3zc.com/2022/05/mac%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">Mac OS环境下使用Hexo搭建个人博客</a><br>安装 Git 和 Node.js<br>测试所需组件是否安装成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ npm -v</span><br><span class="line">6.14.8</span><br><span class="line">$ node -v</span><br><span class="line">v14.10.0</span><br><span class="line">$ git --version</span><br><span class="line">git version 2.39.2 (Apple Git-143)</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h1><p>参考 <a target="_blank" rel="noopener" href="https://blog.l3zc.com/2022/05/mac%E7%8E%AF%E5%A2%83%E4%B8%8B%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">Mac OS环境下使用Hexo搭建个人博客</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line">hexo init blog</span><br><span class="line">cd blog</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/hexo-s.png"></p>
+<h1 id="部署到GitHub"><a href="#部署到GitHub" class="headerlink" title="部署到GitHub"></a>部署到GitHub</h1><p>参考 <a target="_blank" rel="noopener" href="https://oceanwang.top/personal-website-7/">搭建个人博客网站教程-07：Hexo+GitHub Pages：将网站部署到GitHub Pages上</a><br>在Github中创建目录仓库<br>个人经验：在创建new repo时候，一定要勾选“Add a README file”，不然后面会看不到GitHub Pages的域名和部署分支<br>创建之后，通过“Settings”，进入GitHub Pages相关的部分，确定branch是main。<br>此时在浏览器中输入，<a target="_blank" rel="noopener" href="https://github用户名.github.io/">https://GitHub用户名.github.io</a> 应该会显示最简单的博客页面。</p>
+<h1 id="安装-Hexo-的扩展-hexo-deployer-git"><a href="#安装-Hexo-的扩展-hexo-deployer-git" class="headerlink" title="安装 Hexo 的扩展 hexo-deployer-git"></a>安装 Hexo 的扩展 hexo-deployer-git</h1><p>在博客文件夹下执行：<code>npm install hexo-deployer-git --save</code><br>编辑博客安装文件夹下的_config.yml文件，翻到底部，修改deploy部分为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy: </span><br><span class="line">  type: git</span><br><span class="line">  repo: https://[token]@github.com/GitHub用户名/GitHub用户名.github.io.git</span><br><span class="line">  branch: main</span><br><span class="line">  token: [token]</span><br></pre></td></tr></table></figure>
+
+<h1 id="hexo-d遇到问题"><a href="#hexo-d遇到问题" class="headerlink" title="hexo d遇到问题"></a>hexo d遇到问题</h1><p>参考：<a target="_blank" rel="noopener" href="https://jums.club/hexo-Error-Spawn-failed/">hexo部署出现错误解决方式：Error: Spawn failed</a></p>
+<p><img src="/images/error-message.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Error: Spawn failed</span><br><span class="line">    at ChildProcess.&lt;anonymous&gt; (/Users/ming/mySpace/blog/node_modules/hexo-deployer-git/node_modules/hexo-util/lib/spawn.js:51:21)</span><br><span class="line">    at ChildProcess.emit (events.js:314:20)</span><br><span class="line">    at Process.ChildProcess._handle.onexit (internal/child_process.js:276:12)</span><br></pre></td></tr></table></figure>
+
+<p>我用的是第三种解决方式：’有可能是你的git repo配置地址不正确,可以将http方式变更为ssh方式‘<br>在_config.yml文件中修改为<code>repo: https://[token]@github.com/GitHub用户名/GitHub用户名.github.io.git</code>.<br>然后，操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">##进入站点根目录</span><br><span class="line">cd blog</span><br><span class="line">##删除git提交内容文件夹</span><br><span class="line">rm -rf .deploy_git/</span><br><span class="line">##执行</span><br><span class="line">git config --global core.autocrlf false</span><br><span class="line">##最后</span><br><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<p>多试两次。如果有代理的话，先关掉代理，再尝试。</p>
+<p>如果还是不行的话，进入deploy文件夹，强制上传</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">##进入站点根目录</span><br><span class="line">##进入depoly文件夹：</span><br><span class="line">cd .deploy_git/</span><br><span class="line">##强制推送：</span><br><span class="line">git push -f https://[token]@github.com/GitHub用户名/GitHub用户名.github.io.git main</span><br></pre></td></tr></table></figure>
+
+<h1 id="Hexo写文章"><a href="#Hexo写文章" class="headerlink" title="Hexo写文章"></a>Hexo写文章</h1><p>参考 </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://fuguigui.github.io/hexo2/">一次完整的Hexo写作流程</a></li>
+<li><a target="_blank" rel="noopener" href="https://cloud.baidu.com/article/3284847">Hexo系列（四）：Hexo写文章</a></li>
+<li><a target="_blank" rel="noopener" href="https://fuhailin.github.io/Hexo-images/">在Hexo博客中插入图片的各种方式</a><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo g </span><br><span class="line">hexo s #本地预览，再更改，直到满意为止</span><br><span class="line">hexo d #远程部署。</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="Hexo更换theme"><a href="#Hexo更换theme" class="headerlink" title="Hexo更换theme"></a>Hexo更换theme</h1><p>参考 <a target="_blank" rel="noopener" href="https://cloud.baidu.com/article/3284863">Hexo主题更换</a><br>Use <a target="_blank" rel="noopener" href="https://github.com/CodeDaraW/Hacker/tree/master">Hacker</a> theme</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd themes/</span><br><span class="line">git clone https://github.com/kaedea/hexo-theme-hacker.git Hacker</span><br></pre></td></tr></table></figure>
+<p>modify <code>_config.yml</code> file:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: Hacker</span><br></pre></td></tr></table></figure>
+<p>run command <code>hexo clean</code> to clean cache files before <code>hexo g</code>.</p>
+<h1 id="create-a-new-page-on-theme"><a href="#create-a-new-page-on-theme" class="headerlink" title="create a new page on theme"></a>create a new page on theme</h1><p>参考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/29167023/how-to-add-route-for-hexo">How to add route for Hexo?</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page &quot;about&quot;</span><br></pre></td></tr></table></figure>
+<p>A folder will be created in <code>source/</code>. In this folder, there is a file named <code>index.md</code>. In this file, you can write the content of this page <code>/about</code> in markdown.</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/tech/">tech</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/tech/">tech</a>
+    </span>
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2022/08/01/set-up-blog/#comment">Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2001/08/01/hello-world/"><span>Hello World</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2001/08/01/hello-world/" rel="bookmark">
+        <time class="entry-date published" datetime="2001-08-01T08:00:00.000Z">
+          2001-08-01
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+    <div class="article-meta pull-right">
+      <span>
+        <i class="icon-comments"></i>
+        <span>
+          <a href="/2001/08/01/hello-world/#comment">Comments</a>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+</article>
+
+
+
+
+<section class="pagination">
+  
+</section>
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Deployed by <a href="https://github.com/kaedea/notion-down" target="_blank">notion-down</a> and
+    Theme by <a href="https://github.com/kaedea/hexo-theme-hacker" target="_blank">hexo-theme-hacker</a>
+    </br>
+    
+    &copy; 2024 Akira
+    
+  </p>
+</footer>
+    
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'G-J38N5N288S', 'auto');
+    ga('send', 'pageview');
+
+</script>
+
+  </div>
+</div>
+</body>
+</html>
